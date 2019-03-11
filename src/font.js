@@ -7,7 +7,7 @@ var fontsheettable =
 	 "NOPQRSTUVWXYZ",
 	 "abcdefghijklm",
 	 "nopqrstuvwxyz",
-	 " ,.?!/<>;:()🅱️",
+	 " ,.?!/<>;:()'�",
 	];
 var fontset = {
 	image : makeImage("src/font.png")

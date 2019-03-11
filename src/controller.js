@@ -13,13 +13,16 @@ function addEvents() {
 		makeClick(e.offsetX, e.offsetY);
 	});
 	eventCatcher.addEventListener("touchstart", function(e) {
-		makeClick(e.x, e.y);
+		e.preventDefault();
+		//console.log("ping", e.x, e.y);
+		makeClick(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
 	});
 }
 
-function makeClick(x, y) {
-	var adjx = x * canvas.width / parseInt(canvas.style.width);
-	var adjy = y * canvas.width / parseInt(canvas.style.width);
-	//console.log(adjx, adjy);
-	runnee.click(adjx, adjy);
+function makeClick(clientX, clientY) {
+	var rect = canvas.getBoundingClientRect();
+	var adjX = (clientX-rect.left)*canvas.width/rect.width;
+	var adjY = (clientY-rect.top)*canvas.height/rect.height;
+	//console.log("x: " + adjX + ", y: " + adjY);
+	runnee.click(adjX, adjY);
 }

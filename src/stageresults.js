@@ -27,7 +27,7 @@ var stageIntroScreen = {
 	},
 }
 
-var stageFinishingScreen = {
+var stageFinishing = {
 	update : function() {
 		if (faders.length <= 0) {
 			stageResultsScreen.begin();
@@ -78,5 +78,40 @@ var stageResultsScreen = {
 	},
 	click : function(x, y) {
 		this.buttons.forEach(oj=>oj.checkClick(x, y));
+	},
+}
+
+var gameFinishedScreen = {
+	mainMenuButton : new Button(SIZE/4, SIZE*2/3, SIZE/2, 35, "MAIN MENU", function(){runnee = mainMenu}),
+	begin : function() {
+		runnee = this;
+	},
+	update : function() {
+		
+	},
+	draw : function() {
+		drawText("THAT'S ALL FOR NOW", SIZE/2, SIZE/3, 1/2);
+		drawText("SCORE:", SIZE/2, SIZE/2, 1); drawText(totalScore, SIZE/2, SIZE/2, 0);
+		this.mainMenuButton.draw();
+	},
+	click : function(x, y) {
+		this.mainMenuButton.checkClick(x, y);
+	},
+}
+
+var gameOverScreen = {
+	mainMenuButton : new Button(SIZE/4, SIZE*2/3, SIZE/2, 35, "MAIN MENU", function(){runnee = mainMenu}),
+	begin : function() {
+		runnee = this;
+	},
+	update : function() {
+		
+	},
+	draw : function() {
+		drawText("GAME OVER", SIZE/2, SIZE/3, 1/2);
+		this.mainMenuButton.draw();
+	},
+	click : function(x, y) {
+		this.mainMenuButton.checkClick(x, y);
 	},
 }

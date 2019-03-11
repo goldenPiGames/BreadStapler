@@ -26,7 +26,11 @@ const gameEngine = {
 		});
 		trees.forEach(oj=>oj.update());
 		if (stage.hasWon()) {
-			runnee = stageFinishingScreen;
+			runnee = stageFinishing;
+			return;
+		}
+		if (stage.hasLost()) {
+			gameOverScreen.begin();
 		}
 	},
 	draw : function() {
@@ -49,7 +53,7 @@ const gameEngine = {
 	},
 }
 
-function tryStaple(stap) {
+/* function tryStaple(stap) {
 	var x = stap.x;
 	var y = stap.y;
 	accTotal ++;
@@ -90,5 +94,4 @@ function tryStaple(stap) {
 		stageScore += oj.gotPoints;
 		faders.push(oj);
 	});
-}
-
+} */
