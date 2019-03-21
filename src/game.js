@@ -3,7 +3,14 @@ var totalScore = 0;
 var diffAdjCurrent;
 var diffAdjAll;
 
-function startGame() {
+function startWorld(tos) {
+	if (typeof tos == "number") {
+		worldIndex = dex;
+		world = WORLDS[worldIndex];
+	} else {
+		world = tos;
+		worldIndex = world.index;
+	}
 	diffAdjCurrent = 0;
 	diffAdjAll = 0;
 	totalScore = 0;
@@ -26,7 +33,7 @@ const gameEngine = {
 		});
 		trees.forEach(oj=>oj.update());
 		if (stage.hasWon()) {
-			runnee = stageFinishing;
+			switchScreen(stageFinishing);
 			return;
 		}
 		if (stage.hasLost()) {

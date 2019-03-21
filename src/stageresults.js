@@ -1,3 +1,7 @@
+WORLDS.forEach(function(oj, dex) {
+	oj.index = dex;
+});
+
 var stageIntroScreen = {
 	continueButton : new Button(SIZE/3, SIZE - 50, SIZE/3, TEXT_HEIGHT+6, "BEGIN", function(){runnee = gameEngine}),
 	begin : function() {
@@ -5,20 +9,25 @@ var stageIntroScreen = {
 		this.buttons = [
 			this.continueButton,
 		];
-		this.duction = new stage.introducing();
-		this.duction.x = SIZE/2;
-		this.duction.y = 30+TEXT_HEIGHT*3;
-		
+		if (stage.introducing) {
+			this.duction = stage.introducing;
+			if (typeof this.duction == "function")
+				this.duction = new this.duction();
+			this.duction.x = SIZE/2;
+			this.duction.y = 30+TEXT_HEIGHT*3;
+		}
+		if (stage.music)
+			playMusic(stage.music);
 	},
 	update : function() {
 		
 	},
 	draw : function() {
-		drawText("STAGE "+stageIndex, SIZE/2, 0, 1/2);
-		drawText(stage.name, SIZE/2, TEXT_HEIGHT, 1/2);
-		drawText("NEW:"+this.duction.name, SIZE/2, 10+TEXT_HEIGHT*2, 1/2);
 		if (this.duction.draw)
 			this.duction.draw();
+		drawText("WORLD "+worldIndex + " STAGE "+stageIndex, SIZE/2, 0, 1/2);
+		drawText(stage.name, SIZE/2, TEXT_HEIGHT, 1/2);
+		drawText("NEW:"+this.duction.name, SIZE/2, 10+TEXT_HEIGHT*2, 1/2);
 		drawParagraph(this.duction.description, 0, 50+TEXT_HEIGHT*3, SIZE);
 		this.buttons.forEach(oj=>oj.draw());
 	},
@@ -46,7 +55,7 @@ var stageResultsScreen = {
 		this.buttons = [
 			this.continueButton,
 		];
-		var accuracy = accHits / accTotal;
+		var accuracy = Math.min(accHits / accTotal, 1.0);
 		this.scores = [
 			{name:"BASE:", val:stageScore},
 			{name:"ACCURACY:", val:accuracy, mult:true, valdisp:asPercent(accuracy)},
@@ -81,16 +90,17 @@ var stageResultsScreen = {
 	},
 }
 
-var gameFinishedScreen = {
-	mainMenuButton : new Button(SIZE/4, SIZE*2/3, SIZE/2, 35, "MAIN MENU", function(){runnee = mainMenu}),
+var worldFinishedScreen = {
+	mainMenuButton : new TextButton("CONTINUE", function(){worldSelect.begin();}, SIZE/2, SIZE*2/3, 1/2, 0),
 	begin : function() {
+		localStorage.setItem("world"+worldIndex+"highscore", totalScore);
 		runnee = this;
 	},
 	update : function() {
 		
 	},
 	draw : function() {
-		drawText("THAT'S ALL FOR NOW", SIZE/2, SIZE/3, 1/2);
+		drawText("WORLD "+world.index+" COMPLETE!", SIZE/2, SIZE/3, 1/2);
 		drawText("SCORE:", SIZE/2, SIZE/2, 1); drawText(totalScore, SIZE/2, SIZE/2, 0);
 		this.mainMenuButton.draw();
 	},

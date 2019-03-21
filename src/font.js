@@ -35,6 +35,7 @@ function drawText(text, x, y, right, sizemult) {
 }
 
 function drawParagraph(text, x, y, width) {
+	var lines = 0;
 	var rx = x + width;
 	var words = text.split(" ");
 	var cx = x;
@@ -42,14 +43,17 @@ function drawParagraph(text, x, y, width) {
 		var word = words.shift();
 		if (word == "<br>") {
 			y += TEXT_HEIGHT;
+			lines++;
 			cx = x;
 		} else {
 			if (cx + word.length*TEXT_WIDTH > rx) {
 				y += TEXT_HEIGHT;
+				lines++;
 				cx = x;
 			}
 			drawText(word, cx, y, 0);
 			cx += (word.length+1)*TEXT_WIDTH;
 		}
 	}
+	return lines;
 }

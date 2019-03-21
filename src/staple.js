@@ -1,4 +1,4 @@
-function Staple(x, y, t = 0) {
+function Staple(x, y, t = 0, ) {
 	this.x = x;
 	this.y = y;
 	this.t = t;
@@ -42,6 +42,7 @@ Staple.prototype.update = function() {
 			faders.push(this);
 			return false;
 		}
+		playSFX("staple");
 		hitBreads.forEach(function(oj) {
 			accHits ++;
 			oj.gotPoints = oj.getPoints(oj.coll, collTree);

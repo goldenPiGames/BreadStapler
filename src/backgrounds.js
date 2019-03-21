@@ -1,9 +1,15 @@
-function drawClearSky() {
+function BGClearSky() {
+	
+}
+BGClearSky.prototype.draw = function() {
 	ctx.fillStyle = "#55AAEE";
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
-function drawCloudySky() {
-	ctx.fillStyle = "#5599DD";
+function BGCloudySky() {
+	
+}
+BGCloudySky.prototype.draw = function() {
+	ctx.fillStyle = "#5588CC";
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
 }

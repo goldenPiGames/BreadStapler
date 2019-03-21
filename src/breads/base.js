@@ -1,4 +1,5 @@
 var breads;
+const BREAD_EDGE_MULT = .75;
 
 const BreadBase = {
 	isBread : true,
@@ -21,11 +22,11 @@ const BreadBase = {
 		return (this.fade > 0);
 	},
 	collides : function(x, y) {
-		var xoff = Math.abs(x - this.x);
-		var yoff = Math.abs(y - this.y);
+		var xoff = Math.floor(Math.abs(x - this.x));
+		var yoff = Math.floor(Math.abs(y - this.y));
 		if (xoff > this.width/2 || yoff > this.height/2)
 			return false;
-		return 1-Math.max(xoff/this.width, yoff/this.height)/2; //100% in center, 75% on edge
+		return 1-Math.max(xoff/this.width, yoff/this.height)*2*(1-BREAD_EDGE_MULT);
 	},
 	getPoints : function(bcoll, tcoll) {
 		return Math.ceil(this.maxPoints * bcoll * tcoll);

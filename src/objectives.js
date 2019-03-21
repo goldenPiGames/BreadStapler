@@ -1,8 +1,15 @@
 var objective;
 
+const StageBase = {
+	drawBackground() {
+		this.background.draw();
+	},
+}
+
 function AllBreadStage() {
 	
 }
+AllBreadStage.prototype = Object.create(StageBase);
 AllBreadStage.prototype.name = "Staple All Bread";
 AllBreadStage.prototype.description = "Staple all bread to the tree. Bread that falls off screen will return later. You cannot lose. Just go for a high score.";
 AllBreadStage.prototype.update = function() {
@@ -10,7 +17,7 @@ AllBreadStage.prototype.update = function() {
 		this.pushDelay--;
 		if (this.pushDelay <= 0) {
 			breads.push(this.breadQueue.shift().reset());
-			this.pushDelay = this.maxPushDelay;
+			this.pushDelay = this.maxPushDelay * (.8+.4*Math.random());
 		}
 	}
 }
@@ -45,15 +52,23 @@ AllBreadStage.prototype.accFallen = 0;
 function TimedScoreStage() {
 	
 }
+TimedScoreStage.prototype = Object.create(StageBase);
 TimedScoreStage.prototype.name = "Score Timed";
 TimedScoreStage.prototype.description = "Get the required score before time runs out.";
 TimedScoreStage.prototype.update = function() {
 	this.timeLeft--;
 	this.pushDelay--;
 	if (this.pushDelay <= 0 && breads.length < this.maxBreadAtOnce) {
-		breads.push(new (this.popper.pop())());
-		this.pushDelay = this.maxPushDelay;
+		breads.push(new (this.breadPopper.pop())());
+		this.pushDelay = this.delayPopper.pop();
 	}
+}
+TimedScoreStage.prototype.init = function() {
+	this.delayPopper = new WeightPopper(1.2,
+		new WeightPopperTicket(this.maxPushDelay*.8, 1),
+		new WeightPopperTicket(this.maxPushDelay, 1),
+		new WeightPopperTicket(this.maxPushDelay*1.2, 1),
+		);
 }
 TimedScoreStage.prototype.breadFell = function(slice) {
 	slice.reset();

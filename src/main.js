@@ -14,6 +14,8 @@ function startLoading() {
 	
 	eventCatcher = document.getElementById("GraphicsBox");
 	addEvents();
+	initSFX();
+	initMusic();
 	
 	launchGame();
 }
@@ -70,10 +72,22 @@ function asPercent(num, precision = 0) {
 	return round(num*100, precision)+"%";
 }
 
+function shuffle(ray) {
+	var currdex = ray.length;
+	while (currdex > 0) {
+		var randex = Math.floor(Math.random() * currdex);
+		currdex --;
+		var temp = ray[currdex];
+		ray[currdex] = ray[randex];
+		ray[randex] = temp;
+	}
+	return ray;
+}
+
 function clearBack() {
 	ctx.globalAlpha = 1;
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	ctx.fillStyle = "#000000"//settings.background_color;
+	ctx.fillStyle = "#000000";
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
