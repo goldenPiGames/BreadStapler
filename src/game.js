@@ -5,7 +5,7 @@ var diffAdjAll;
 
 function startWorld(tos) {
 	if (typeof tos == "number") {
-		worldIndex = dex;
+		worldIndex = tos;
 		world = WORLDS[worldIndex];
 	} else {
 		world = tos;
