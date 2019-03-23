@@ -15,7 +15,7 @@ function TutorialStage() {
 }; world.stages.push(TutorialStage);
 TutorialStage.prototype = Object.create(AllBreadStage.prototype);
 TutorialStage.prototype.name = "Tutorial";
-TutorialStage.prototype.music = "Breeze";
+TutorialStage.prototype.music = "Prairie";
 TutorialStage.prototype.introducing = AllBreadStage;
 TutorialStage.prototype.maxPushDelay = 30;
 TutorialStage.prototype.maxBreadAtOnce = 1;
