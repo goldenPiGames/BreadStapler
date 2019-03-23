@@ -95,7 +95,7 @@ var worldFinishedScreen = {
 	begin : function() {
 		var saveword = "world"+worldIndex+"highscore";
 		var prevBest = parseInt(localStorage.getItem(saveword));
-		if (totalScore > prevBest)
+		if (!(prevBest > totalScore))
 			localStorage.setItem(saveword, totalScore);
 		runnee = this;
 	},
