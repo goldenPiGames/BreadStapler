@@ -56,6 +56,8 @@ var mainMenu = {
 	draw : function() {
 		//ctx.fillStyle = "#eeeeee";
 		//ctx.fillRect(10, 10, 20, 20);
+		drawText("BREAD STAPLER", SIZE/2, 30, 1/2);
+		drawParagraph("(Imagine some kind of cool logo here)", 3, TEXT_HEIGHT+35, SIZE);
 		this.buttons.forEach(oj=>oj.draw());
 	},
 	click : function(x, y) {
@@ -89,14 +91,14 @@ function WorldSelector(warudo, y) {
 	this.warudo = warudo;
 	this.y = y;
 	this.textTop = "WORLD "+warudo.index+": "+warudo.name;
-	this.textTop = world+localStorage.getItem("world"+world.index+"highscore");
+	this.textBottomRight = localStorage.getItem("world"+world.index+"highscore");
 	this.color = warudo.color;
 }
 WorldSelector.prototype.draw = function() {
 	ctx.fillStyle = this.color;
 	ctx.fillRect(this.x, this.y, this.width, this.height);
 	drawText(this.textTop, 3, this.y+3, 0, 0);
-	drawText(this.textBottomRight, 3, this.y+3+TEXT_HEIGHT, SIZE-3, 0);
+	drawText(this.textBottomRight, SIZE-3, this.y+3+TEXT_HEIGHT, 1, 0);
 }
 WorldSelector.prototype.checkClick = function(x, y) {
 	if (y >= this.y && y < this.y + this.height) {

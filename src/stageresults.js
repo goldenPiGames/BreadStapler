@@ -93,7 +93,10 @@ var stageResultsScreen = {
 var worldFinishedScreen = {
 	mainMenuButton : new TextButton("CONTINUE", function(){worldSelect.begin();}, SIZE/2, SIZE*2/3, 1/2, 0),
 	begin : function() {
-		localStorage.setItem("world"+worldIndex+"highscore", totalScore);
+		var saveword = "world"+worldIndex+"highscore";
+		var prevBest = parseInt(localStorage.getItem(saveword));
+		if (totalScore > prevBest)
+			localStorage.setItem(saveword, totalScore);
 		runnee = this;
 	},
 	update : function() {

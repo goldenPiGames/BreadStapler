@@ -64,5 +64,6 @@ function InstructionSlide(text, drawEx = doNothing) {
 InstructionSlide.prototype.draw = function() {
 	//drawSprite(this.image, SIZE/2, SIZE, 0.5, 1);
 	this.drawEx();
+	drawText("UNDER CONSTRUCTION", SIZE/2, SIZE*2/3, .5);
 	drawParagraph(this.text, 0, 0, SIZE);
 }

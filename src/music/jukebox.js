@@ -1,5 +1,6 @@
 const MUSIC_LIST = [
-	{name:"Prairie",              by:"PeriTune",      yt:"iMkX3NxQYv0", site:"https://peritune.com/prairie/", ogg:true},
+	{name:"Breeze",               by:"PeriTune",      yt:"RINkM_o-e4I", site:"https://peritune.com/breeze/"},
+	{name:"Prairie",              by:"PeriTune",      yt:"iMkX3NxQYv0", site:"https://peritune.com/prairie/"},
 	{name:"Strategy 3",           by:"PeriTune",      yt:"tqS-DwicQCo", site:"https://peritune.com/strategy3/"},
 	{name:"Havoc",                by:"PeriTune",      yt:"yfE5y2uiBX0", site:"https://peritune.com/havoc", loopStart:4.304, loopEnd:112.101},
 	{name:"Tempest",              by:"Darren Curtis", yt:"NsSYDbyQteg", site:"https://www.darrencurtismusic.com/fantasy"},
@@ -7,14 +8,16 @@ const MUSIC_LIST = [
 	{name:"War of the Pianos",    by:"Darren Curtis", yt:"CP8HoV4ArHw", site:"https://www.darrencurtismusic.com/hybrid-other"},
 	{name:"Exotic",               by:"PeriTune",      yt:"ykiWQdzt4GI", site:"https://peritune.com/exotic/"},
 	{name:"Rapid 4",              by:"PeriTune",      yt:"g3c-dHAI-ts", site:"https://peritune.com/rapid4/"},
-	{name:"Let's Party 2",        by:"PeriTune", yt:"rb8gRa6tTMY", site:"https://peritune.com/lets-party2/"},
+	{name:"Let's Party 2",        by:"PeriTune",      yt:"rb8gRa6tTMY", site:"https://peritune.com/lets-party2/"},
+	{name:"Up In My Jam",         by:"Kubbi",         yt:"6DB6hBRPsWc", site:"https://kubbimusic.com/track/up-in-my-jam-all-of-a-sudden"},
+	{name:"Machinery",            by:"PeriTune",      yt:"7zT8zYYyxFg", site:"https://peritune.com/machinery/"},
 	{name:"Dark Anthem",          by:"Darren Curtis", yt:"G-VY51L2AQU", site:"https://www.darrencurtismusic.com/horror-mystery", loopStart:0, loopEnd:201.175},//loopStart:8.743, loopEnd:200.673},
 	{name:"Demise",               by:"PeriTune",      yt:"Ouj_cwWJdmo", site:"https://peritune.com/demise/", loopStart:13.111, loopEnd:99.403},
-	{name:"Don't Sleep",          by:"Ucchii 0",      yt:"pluUDQCBSso", site:"https://creofuga.net/audios/106981", loopStart:13.81606, loopEnd:97.81608, ogg:true},
+	{name:"Don't Sleep",          by:"Ucchii 0",      yt:"pluUDQCBSso", site:"https://creofuga.net/audios/106981", loopStart:13.81606, loopEnd:97.81608},
 	//{name:"Decisions",            by:"Eric Matyas", site:"https://soundimage.org/introspective/"},
 	//{name:"Blue Ridge",           by:"Eric Matyas", site:"http://soundimage.org/quiet-peaceful-mellow/"},
 	//{name:"Nostalgic 2",          by:"PeriTune",      yt:"rAwL5hyQbhU", site:"https://peritune.com/nostalgic2/", ogg:true},
-	//{name:"BattleField 2",        by:"PeriTune",      yt:"SWDVaQ8WAyM", site:"https://peritune.com/battlefield2/",loopStart:9, loopEnd:91.33},
+	//{name:"BattleField 2",        by:"PeriTune",      yt:"SWDVaQ8WAyM", site:"https://peritune.com/battlefield2/", loopStart:9, loopEnd:91.33},
 	//{name:"Mountainside",         by:"Eric Matyas", site:"https://soundimage.org/quiet-peaceful-mellow/"},
 	//{name:"Fuji",                 by:"Eric Matyas", site:"http://soundimage.org/naturescience/"},
 	//{name:"Hong Kong Midnight",   by:"Eric Matyas", site:"https://soundimage.org/world/"},
@@ -30,17 +33,22 @@ const MUSIC_LIST = [
 	//{name:"Seiiki Kessen",        by:"Ucchii 0",      yt:"6Yx2__wLYek", loopStart:11.380, loopEnd:169.484},
 ];
 
-var MUSIC_HASH = {};
+const MUSIC_HASH = {};
+const MUSIC_BY_ARTIST = {};
 
 MUSIC_LIST.forEach(function(sing, dex) {
 	MUSIC_HASH[sing.name + " - " + sing.by] = sing;
 	MUSIC_HASH[sing.name] = sing;
 	sing.index = dex;
+	if (!MUSIC_BY_ARTIST[sing.by])
+		MUSIC_BY_ARTIST[sing.by] = [sing.name];
+	else
+		MUSIC_BY_ARTIST[sing.by].push(sing.name);
 });
 
 var jukebox = {
 	returnButton : new TextButton("BACK", function(){mainMenu.begin()}, SIZE-10, SIZE-10, 1, 1),
-	pauseButton : new TextButton(function(){if(music.paused) {music.play(); this.text = "Pause"} else {music.pause(); this.text = "Play"}}),
+	pauseButton : new TextButton("Pause", function(){if(music.paused) {music.play(); this.text = "Pause"} else {music.pause(); this.text = "Play"}}, SIZE-10, 10, 1, 0),
 	// siteButton = new Button(ritx, 10, thic, 40, "Artist's site", "See the current music on the artist's site. You might need to allow popups for this to work.", function(){window.open(song.site)}, false),
 	// this.siteButton.active = song && song.site;
 	// this.youtubeButton = new Button(ritx, 60, thic, 40, "YouTube", "See the current music on YouTube. You might need to enable popups for this to work.", function(){window.open("https://youtu.be/"+song.yt)}, false),
@@ -55,6 +63,7 @@ var jukebox = {
 	draw : function() {
 		this.returnButton.draw();
 		this.pauseButton.draw();
+		drawText("UNDER CONSTRUCTION", SIZE/2, SIZE/2, .5);
 	},
 	click : function(x, y) {
 		this.returnButton.checkClick(x, y);
@@ -99,7 +108,7 @@ playMusic = function(sin) {
 	var songName = song.name + " - " + song.by;
 	var unsce = songName.replace(/\s/g, "");
 	var end = "mp3"//(canPlayOgg && song.ogg) ? "ogg" : "mp3";
-	music.src = "src/Music/"+unsce+"."+end;
+	music.src = "src/music/"+unsce+"."+end;
 	music.currentTime = 0;
 	music.play();
 }

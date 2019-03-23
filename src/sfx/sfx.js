@@ -10,7 +10,7 @@ function initSFX() {
 		fec.preload = "auto";
 		fec.controls = "none";
 		fec.style.display = "none";
-		fec.addEventListener('ended', function() {
+		fec.addEventListener("ended", function() {
 				this.currentTime = 0;
 				this.pause();
 			}, false);

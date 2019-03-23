@@ -15,7 +15,7 @@ function TutorialStage() {
 }; world.stages.push(TutorialStage);
 TutorialStage.prototype = Object.create(AllBreadStage.prototype);
 TutorialStage.prototype.name = "Tutorial";
-TutorialStage.prototype.music = "Prairie";
+TutorialStage.prototype.music = "Breeze";
 TutorialStage.prototype.introducing = AllBreadStage;
 TutorialStage.prototype.maxPushDelay = 30;
 TutorialStage.prototype.maxBreadAtOnce = 1;
@@ -143,33 +143,3 @@ TimeIntroStage.prototype.baseScoreGoal = 1500;
 TimeIntroStage.prototype.maxPushDelay = 30;
 TimeIntroStage.prototype.maxBreadAtOnce = 5;
 
-function TwoTreesStage() {
-	this.breadQueue = shuffle([
-		new WhiteBread(),
-		new WhiteBread(),
-		new WhiteBread(),
-		new WhiteBread(),
-		new WhiteBread(),
-		new WhiteBread(),
-		new RyeBread(),
-		new RyeBread(),
-		new RyeBread(),
-		new RyeBread(),
-		new RyeBread(),
-		new RyeBread(),
-	]);
-	this.pushDelay = 0;
-	trees = [
-		new Oak(SIZE*1/4),
-		new Oak(SIZE*3/4),
-	];
-	this.background = new BGCloudySky();
-}; world.stages.push(TwoTreesStage);
-TwoTreesStage.prototype = Object.create(AllBreadStage.prototype);
-TwoTreesStage.prototype.name = "Getting Out of Hand";
-TwoTreesStage.prototype.introducing = {
-	name : "multiple trees",
-	description : "Sometimes there can be more than one tree.",
-}
-TwoTreesStage.prototype.maxPushDelay = 35;
-TwoTreesStage.prototype.maxBreadAtOnce = 4;
