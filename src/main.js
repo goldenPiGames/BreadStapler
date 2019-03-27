@@ -3,16 +3,20 @@ var gameInterval;
 var canvas;// = document.getElementById("GraphicsBox");
 var ctx;
 var eventCatcher;
+var body;
 var loadingTotal = 0;
 var loadedYet = 0;
 
 function startLoading() {
+	body = document.getElementById("Body");
 	backDiv = document.getElementById("BackgroundBox");
 	canvas = document.getElementById("GraphicsBox");
 	ctx = canvas.getContext("2d");
 	//gameInterval = setInterval(hasLoaded, 250);
 	
 	eventCatcher = document.getElementById("GraphicsBox");
+	
+	setBackgroundWidth();
 	addEvents();
 	initSFX();
 	initMusic();
@@ -33,6 +37,16 @@ function launchGame() {
 	runnee = mainMenu;
 	//initMusic();
 	coreEngine.start();
+}
+
+function setBackgroundWidth() {
+	var size = Math.min(window.innerWidth, window.innerHeight, SIZE*2);
+	backDiv.style.width = size+"px";
+	backDiv.style.height = size+"px";
+	if (size == SIZE*2)
+		backDiv.classList.add("pixellated");
+	else
+		backDiv.classList.remove("pixellated");
 }
 
 function PRound(num, seed) {

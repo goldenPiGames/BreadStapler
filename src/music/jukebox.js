@@ -1,5 +1,5 @@
 const MUSIC_LIST = [
-	{name:"Breeze",               by:"PeriTune",      yt:"RINkM_o-e4I", site:"https://peritune.com/breeze/"},
+	//{name:"Breeze",               by:"PeriTune",      yt:"RINkM_o-e4I", site:"https://peritune.com/breeze/"},
 	{name:"Prairie",              by:"PeriTune",      yt:"iMkX3NxQYv0", site:"https://peritune.com/prairie/"},
 	{name:"Strategy 3",           by:"PeriTune",      yt:"tqS-DwicQCo", site:"https://peritune.com/strategy3/"},
 	{name:"Havoc",                by:"PeriTune",      yt:"yfE5y2uiBX0", site:"https://peritune.com/havoc", loopStart:4.304, loopEnd:112.101},
@@ -7,11 +7,13 @@ const MUSIC_LIST = [
 	{name:"Underwater Coolness",  by:"Eric Matyas", site:"https://soundimage.org/nature-science-3/"},
 	{name:"War of the Pianos",    by:"Darren Curtis", yt:"CP8HoV4ArHw", site:"https://www.darrencurtismusic.com/hybrid-other"},
 	{name:"Exotic",               by:"PeriTune",      yt:"ykiWQdzt4GI", site:"https://peritune.com/exotic/"},
+	{name:"Seahorse Dreams",      by:"Kubbi",         yt:"DLvrDRRaftQ", site:"https://kubbimusic.com/track/seahorse-dreams"},
 	{name:"Rapid 4",              by:"PeriTune",      yt:"g3c-dHAI-ts", site:"https://peritune.com/rapid4/"},
+	{name:"Beatdown City",        by:"Darren Curtis", yt:"qL4u3u5WKgU", site:"https://www.darrencurtismusic.com/sci-fi-modern"},
 	{name:"Let's Party 2",        by:"PeriTune",      yt:"rb8gRa6tTMY", site:"https://peritune.com/lets-party2/"},
 	{name:"Up In My Jam",         by:"Kubbi",         yt:"6DB6hBRPsWc", site:"https://kubbimusic.com/track/up-in-my-jam-all-of-a-sudden"},
 	{name:"Machinery",            by:"PeriTune",      yt:"7zT8zYYyxFg", site:"https://peritune.com/machinery/"},
-	{name:"Dark Anthem",          by:"Darren Curtis", yt:"G-VY51L2AQU", site:"https://www.darrencurtismusic.com/horror-mystery", loopStart:0, loopEnd:201.175},//loopStart:8.743, loopEnd:200.673},
+	{name:"Dark Anthem",          by:"Darren Curtis", yt:"G-VY51L2AQU", site:"https://www.darrencurtismusic.com/horror-mystery"},//loopStart:0, loopEnd:201.175},//loopStart:8.743, loopEnd:200.673},
 	{name:"Demise",               by:"PeriTune",      yt:"Ouj_cwWJdmo", site:"https://peritune.com/demise/", loopStart:13.111, loopEnd:99.403},
 	{name:"Don't Sleep",          by:"Ucchii 0",      yt:"pluUDQCBSso", site:"https://creofuga.net/audios/106981", loopStart:13.81606, loopEnd:97.81608},
 	//{name:"Decisions",            by:"Eric Matyas", site:"https://soundimage.org/introspective/"},
@@ -129,6 +131,13 @@ function musicLoopCheck() {
 
 function disableLooping() {
 	musicLoopChack = doNothing;
+}
+
+function destroyMusic() {
+	music.pause();
+	music.src = "";
+	musicLoopChack = doNothing;
+	playMusic = doNothing;
 }
 
 /*var musicLoop = document.createElement("audio");
