@@ -1,5 +1,5 @@
 const MUSIC_LIST = [
-	//{name:"Breeze",               by:"PeriTune",      yt:"RINkM_o-e4I", site:"https://peritune.com/breeze/"},
+	{name:"Breeze",               by:"PeriTune",      yt:"RINkM_o-e4I", site:"https://peritune.com/breeze/"},
 	{name:"Prairie",              by:"PeriTune",      yt:"iMkX3NxQYv0", site:"https://peritune.com/prairie/"},
 	{name:"Strategy 3",           by:"PeriTune",      yt:"tqS-DwicQCo", site:"https://peritune.com/strategy3/"},
 	{name:"Havoc",                by:"PeriTune",      yt:"yfE5y2uiBX0", site:"https://peritune.com/havoc", loopStart:4.304, loopEnd:112.101},
@@ -91,6 +91,7 @@ function initMusic() {
 			this.play();
 		}, false);
 	}
+	music.volume = settings.music;
 	document.body.appendChild(music);
 }
 

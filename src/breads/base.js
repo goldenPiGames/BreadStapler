@@ -5,6 +5,12 @@ const BreadBase = {
 	isBread : true,
 	update : function() {
 		this.move();
+		if (this.hasFallen()) {
+			stage.breadFell(this);
+			return false;
+		} else {
+			return true;
+		}
 	},
 	move : function() {
 		this.x += this.dx;
@@ -17,9 +23,25 @@ const BreadBase = {
 	drawAfter : function() {
 		ctx.globalAlpha = this.fade;
 		this.draw();
-		drawText("+"+this.gotPoints, this.x, this.y-TEXT_HEIGHT/2, 0.5);
 		this.fade -= 1/40;
 		return (this.fade > 0);
+	},
+	checkHit : function(staplex, stapley, hitTree, collTree) {
+		var coll = this.collides(staplex, stapley);
+		if (coll) {
+			if (hitTree) {
+				accHits ++;
+				var punt = this.getPoints(coll, collTree);
+				stage.pointsBread(punt);
+				faders.push(new TextFader("+"+punt, this.x, this.y));
+				hitTree.affix(this, punt);
+			} else {
+				stage.breadFell(this);
+			}
+			return false;
+		} else {
+			return true;
+		}
 	},
 	collides : function(x, y) {
 		var xoff = Math.floor(Math.abs(x - this.x));
@@ -27,6 +49,9 @@ const BreadBase = {
 		if (xoff > this.width/2 || yoff > this.height/2)
 			return false;
 		return 1-Math.max(xoff/this.width, yoff/this.height)*2*(1-BREAD_EDGE_MULT);
+	},
+	hasFallen : function() {
+		return (this.y >= SIZE+50 || (this.dx >= 0 && this.x >= SIZE+50) || (this.dx <= 0 && this.x <= -50))
 	},
 	getPoints : function(bcoll, tcoll) {
 		return Math.ceil(this.maxPoints * bcoll * tcoll);

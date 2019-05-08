@@ -21,9 +21,6 @@ RyeBread.prototype.reset = function() {
 	this.dx = (side?-1:1) * 2;
 	return this;
 }
-RyeBread.prototype.hasFallen = function() {
-	return (this.y >= SIZE+50 || (this.dx >= 0 && this.x >= SIZE+50) || (this.dx <= 0 && this.x <= -50))
-}
 
 function Pumpernickel() {
 	this.reset();
@@ -48,6 +45,41 @@ Pumpernickel.prototype.reset = function() {
 	this.dx = (side?-1:1) * 2;
 	return this;
 }
-Pumpernickel.prototype.hasFallen = function() {
-	return (this.y >= SIZE+50 || (this.dx >= 0 && this.x >= SIZE+50) || (this.dx <= 0 && this.x <= -50))
+
+function MarbleRye() {
+	this.reset();
+}
+MarbleRye.prototype = Object.create(BreadBase);
+MarbleRye.prototype.name = "Marble Rye";
+MarbleRye.prototype.description = "The light and dark dough of this bread actually forms evil, cursed patterns. DO NOT staple it.";
+MarbleRye.prototype.image = makeImage("src/breadsprites/marblerye.png");
+MarbleRye.prototype.width = 36;
+MarbleRye.prototype.height = 25;
+MarbleRye.prototype.g = .025;
+MarbleRye.prototype.basedx = 2;
+MarbleRye.prototype.baseDamage = 150;
+MarbleRye.prototype.reset = function() {
+	var side;
+	if (typeof this.dx == "number")
+		side = this.dx < 0;
+	else
+		side = Math.random()>=.5;
+	this.y = 270 + 90*Math.random();
+	this.dy = -2.0-Math.random()*1.5;
+	this.x = side ? SIZE + 50 : -50;
+	this.dx = (side?-1:1) * this.basedx;
+	return this;
+}
+MarbleRye.prototype.checkHit = function(staplex, stapley, hitTree, collTree) {
+	var coll = this.collides(staplex, stapley);
+	if (coll) {
+		//accHits ++;
+		var dam = this.baseDamage;
+		stage.hurtCurse(dam);
+		faders.push(new TextFader("-"+dam, this.x, this.y));
+		//hitTree.affix(this, -dam);
+		return false;
+	} else {
+		return true;
+	}
 }

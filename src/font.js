@@ -57,3 +57,16 @@ function drawParagraph(text, x, y, width) {
 	}
 	return lines;
 }
+
+function TextFader(text, x, y) {
+	this.text = text;
+	this.x = x;
+	this.y = y;
+}
+TextFader.prototype.fade = 1;
+TextFader.prototype.drawAfter = function() {
+	ctx.globalAlpha = this.fade;
+	drawText(this.text, this.x, this.y-TEXT_HEIGHT/2, 0.5);
+	this.fade -= 1/40;
+	return (this.fade > 0);
+}

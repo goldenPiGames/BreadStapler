@@ -20,22 +20,12 @@ function startLoading() {
 	addEvents();
 	initSFX();
 	initMusic();
-	
+	/*
 	launchGame();
 }
 
-/*function hasLoaded() {
-	console.log("Loaded", loadedYet, "of", loadingTotal);
-	if (loadedYet >= loadingTotal) // Check to see if all info is loaded
-	{
-		clearInterval(gameInterval);
-		startGame();
-	}
-}*/
-
-function launchGame() {
+function launchGame() {*/
 	runnee = mainMenu;
-	//initMusic();
 	coreEngine.start();
 }
 

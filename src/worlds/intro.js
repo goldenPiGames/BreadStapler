@@ -1,4 +1,4 @@
-world = new World("INTRO", "#483C32");
+world = new World("intro", "#483C32");
 WORLDS.push(world);
 
 function TutorialStage() {
@@ -15,7 +15,7 @@ function TutorialStage() {
 }; world.stages.push(TutorialStage);
 TutorialStage.prototype = Object.create(AllBreadStage.prototype);
 TutorialStage.prototype.name = "Tutorial";
-TutorialStage.prototype.music = "Prairie";
+TutorialStage.prototype.music = "Breeze";
 TutorialStage.prototype.introducing = AllBreadStage;
 TutorialStage.prototype.maxPushDelay = 30;
 TutorialStage.prototype.maxBreadAtOnce = 1;
@@ -121,9 +121,7 @@ PumpernickelStage.prototype.introducing = Pumpernickel;
 PumpernickelStage.prototype.maxPushDelay = 35;
 PumpernickelStage.prototype.maxBreadAtOnce = 4;
 
-function TimeIntroStage(diffAdj = 0) {
-	this.timeLeft = 20*60;
-	this.scoreGoal = this.baseScoreGoal/(1+diffAdj/50);
+function TimeIntroStage(diffMult = 1) {
 	this.breadPopper = new WeightPopper(1.3,
 		new WeightPopperTicket(WhiteBread, 3),
 		new WeightPopperTicket(WholeWheatBread, 4),
@@ -133,12 +131,13 @@ function TimeIntroStage(diffAdj = 0) {
 	trees = [
 		new Oak(),
 	];
-	this.init();
+	this.init(diffMult);
 	this.background = new BGCloudySky();
 }; world.stages.push(TimeIntroStage);
 TimeIntroStage.prototype = Object.create(TimedScoreStage.prototype);
-TimeIntroStage.prototype.name = "Kid Loaves are Off";
+TimeIntroStage.prototype.name = "Quickly Now";
 TimeIntroStage.prototype.introducing = TimedScoreStage;
+TimeIntroStage.prototype.timeLeft = 20*60;
 TimeIntroStage.prototype.baseScoreGoal = 1500;
 TimeIntroStage.prototype.maxPushDelay = 30;
 TimeIntroStage.prototype.maxBreadAtOnce = 5;

@@ -15,6 +15,7 @@ function initSFX() {
 				this.pause();
 			}, false);
 		fec.src = "src/sfx/"+oj+".mp3";
+		fec.volume = settings.sfx;
 		document.body.appendChild(fec);
 		sfx[oj] = fec;
 	});
@@ -22,6 +23,12 @@ function initSFX() {
 
 function playSFX(name) {
 	sfx[name].play();
+}
+
+function setSFXVolume(quant) {
+	for (f in sfx) {
+		sfx[f].volume = quant;
+	}
 }
 
 function SFXCycler(name, cycleLength) {
