@@ -2,8 +2,8 @@ function AllBreadStage() {
 	
 }
 AllBreadStage.prototype = Object.create(StageBase);
-AllBreadStage.prototype.name = "Staple All Bread";
-AllBreadStage.prototype.description = "Staple all bread to the tree. Bread that falls off screen will return later. You cannot lose. Just go for a high score.";
+AllBreadStage.prototype.name = lg("allbread");
+AllBreadStage.prototype.description = lg("allbread-desc");
 AllBreadStage.prototype.update = function() {
 	if (breads.length < this.maxBreadAtOnce && this.breadQueue.length > 0) {
 		this.pushDelay--;
@@ -33,9 +33,11 @@ AllBreadStage.prototype.drawHUD = function() {
 	});
 }
 AllBreadStage.prototype.getScoreLines = function() {
-	var ack = accHits / (accHits + this.accFallen);
+	var got = accHits / (accHits + this.accFallen);
 	return [
-		{name:"GETTING:", val:ack, mult:true, valdisp:asPercent(ack)},
+		{name:"BASE:", val:this.score},
+		accuracyLine(),
+		{name:"GETTING:", val:got, mult:true, valdisp:asPercent(got)},
 	];
 }
 AllBreadStage.prototype.hasWon = function() {

@@ -15,6 +15,14 @@ var coreEngine = {
 		runnee.update();
 		clearBack();
 		runnee.draw();
-		setTimeout(function(){thisser.run()}, Math.max(0, desiredTime-Date.now()));
+		var until = desiredTime - Date.now();
+		//console.log(until);
+		//console.log(until);
+		if (until > 0) {
+			setTimeout(function(){thisser.run()}, until);
+		} else {
+			//console.log("lagging by " + (desiredTime-Date.now()));
+			this.run();
+		}
 	},
 }

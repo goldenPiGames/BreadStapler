@@ -13,12 +13,13 @@ const TreeBase = {
 			this.affixed.forEach(oj => oj.draw());
 		}
 	},
-	collides : function(x, y) {
+	collides : genCollidesPillar(TREE_EDGE_MULT),
+	/*collides : function(x, y) {
 		var xoff = Math.floor(Math.abs(x - this.x));
 		if (xoff > this.width/2)
 			return false;
 		return 1-(xoff/this.width)*2*(1-TREE_EDGE_MULT);
-	},
+	},*/
 	affix : function(obj, punt) {
 		//console.log(obj, punt)
 		this.affixed.push(obj);

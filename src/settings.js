@@ -7,14 +7,14 @@ const OPTIONS_LIST = [
 		default : (navigator.userLanguage || navigator.language || "en-US").substr(0, 2),
 		choices : [
 			{name : "en", title : "English"},
-			{name : "es", title : "Espanol"},
+			{name : "es", title : "Español"},
 		]
 	},
 	{
 		name : "music",
 		title : "Music",
 		type : "portion",
-		default : 0.8,
+		default : 8/10,
 		steps : 10,
 		func : "setMusicVolume",
 	},
@@ -22,7 +22,7 @@ const OPTIONS_LIST = [
 		name : "sfx",
 		title : "SFX",
 		type : "portion",
-		default : 0.8,
+		default : 8/10,
 		steps : 10,
 		func : "setSFXVolume",
 	},
@@ -30,7 +30,7 @@ const OPTIONS_LIST = [
 		name : "stay",
 		title : "Stay",
 		type : "portion",
-		default : 0.25,
+		default : 1/2,
 		steps : 4,
 	},
 ]

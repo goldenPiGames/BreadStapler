@@ -97,13 +97,41 @@ OptionItemPortionBox.prototype.action = function() {
 function OptionItemChoices(op, y) {
 	this.option = op;
 	this.y = y;
+	for (var i = 0; i < this.option.choices.length; i++) {
+		if (this.option.choices[i].name == settings[this.option.name])
+			this.choiceIndex = i;
+		if (this.option.choices[i].name == this.option.default)
+			this.defaultIndex = i;
+	}
+	this.leftButton = new TextButton("<", ()=>this.handleLeft(), SIZE/2, this.y, 0);
+	this.rightButton = new TextButton(">", ()=>this.handleRight(), SIZE-4, this.y, 1);
 }
 OptionItemChoices.prototype = Object.create(OptionItem.prototype);
+OptionItemChoices.prototype.choiceIndex = 0;
 OptionItemChoices.prototype.draw = function(oj) {
 	drawText(this.option.title, 3, this.y+3, 0);
+	drawText(this.option.choices[this.choiceIndex].title, SIZE*3/4 - 2, this.y+3, 1/2);
+	this.leftButton.draw();
+	this.rightButton.draw();
 }
 OptionItemChoices.prototype.checkClick = function(x, y) {
-	
+	this.leftButton.checkClick(x, y);
+	this.rightButton.checkClick(x, y);
+	//this.defaultButton.checkClick(x, y);
+}
+OptionItemChoices.prototype.handleLeft = function() {
+	this.choiceIndex--;
+	if (this.choiceIndex < 0)
+		this.choiceIndex += this.option.choices.length;
+	this.changeSetting();
+}
+OptionItemChoices.prototype.handleRight = function() {
+	this.choiceIndex = (this.choiceIndex + 1) % this.option.choices.length;
+	this.changeSetting();
+}
+OptionItemChoices.prototype.changeSetting = function() {
+	settings[this.option.name] = this.option.choices[this.choiceIndex].name;
+	saveSettings();
 }
 
 settingsScreen.build();

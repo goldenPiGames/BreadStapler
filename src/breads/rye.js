@@ -51,7 +51,7 @@ function MarbleRye() {
 }
 MarbleRye.prototype = Object.create(BreadBase);
 MarbleRye.prototype.name = "Marble Rye";
-MarbleRye.prototype.description = "The light and dark dough of this bread actually forms evil, cursed patterns. DO NOT staple it.";
+MarbleRye.prototype.description = "The light and dark dough of this bread actually form evil, cursed patterns. DO NOT staple it.";
 MarbleRye.prototype.image = makeImage("src/breadsprites/marblerye.png");
 MarbleRye.prototype.width = 36;
 MarbleRye.prototype.height = 25;
@@ -70,6 +70,7 @@ MarbleRye.prototype.reset = function() {
 	this.dx = (side?-1:1) * this.basedx;
 	return this;
 }
+MarbleRye.prototype.cursed = true;
 MarbleRye.prototype.checkHit = function(staplex, stapley, hitTree, collTree) {
 	var coll = this.collides(staplex, stapley);
 	if (coll) {

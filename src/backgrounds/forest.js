@@ -1,8 +1,7 @@
 function BGForest() {
 	
 }
+BGForest.prototype.image = makeImage("src/backgrounds/forest.png");
 BGForest.prototype.draw = function() {
-	ctx.fillStyle = "#3344EE";
-	ctx.fillRect(0, 0, canvas.width, canvas.height);
-	
+	drawSprite(this.image, 0, 0, 0, 0);
 }

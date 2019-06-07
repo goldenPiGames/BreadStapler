@@ -15,7 +15,7 @@ function TutorialStage() {
 }; world.stages.push(TutorialStage);
 TutorialStage.prototype = Object.create(AllBreadStage.prototype);
 TutorialStage.prototype.name = "Tutorial";
-TutorialStage.prototype.music = "Breeze";
+TutorialStage.prototype.music = "Prairie";//"Breeze";
 TutorialStage.prototype.introducing = AllBreadStage;
 TutorialStage.prototype.maxPushDelay = 30;
 TutorialStage.prototype.maxBreadAtOnce = 1;
@@ -132,12 +132,12 @@ function TimeIntroStage(diffMult = 1) {
 		new Oak(),
 	];
 	this.init(diffMult);
-	this.background = new BGCloudySky();
+	this.background = new BGClearSky();
 }; world.stages.push(TimeIntroStage);
 TimeIntroStage.prototype = Object.create(TimedScoreStage.prototype);
 TimeIntroStage.prototype.name = "Quickly Now";
 TimeIntroStage.prototype.introducing = TimedScoreStage;
-TimeIntroStage.prototype.timeLeft = 20*60;
+TimeIntroStage.prototype.baseTimeLimit = 20*60;
 TimeIntroStage.prototype.baseScoreGoal = 1500;
 TimeIntroStage.prototype.maxPushDelay = 30;
 TimeIntroStage.prototype.maxBreadAtOnce = 5;

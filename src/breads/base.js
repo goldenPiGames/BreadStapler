@@ -43,13 +43,14 @@ const BreadBase = {
 			return true;
 		}
 	},
-	collides : function(x, y) {
+	collides : genCollidesRect(BREAD_EDGE_MULT),
+	/*collides : function(x, y) {
 		var xoff = Math.floor(Math.abs(x - this.x));
 		var yoff = Math.floor(Math.abs(y - this.y));
 		if (xoff > this.width/2 || yoff > this.height/2)
 			return false;
 		return 1-Math.max(xoff/this.width, yoff/this.height)*2*(1-BREAD_EDGE_MULT);
-	},
+	},*/
 	hasFallen : function() {
 		return (this.y >= SIZE+50 || (this.dx >= 0 && this.x >= SIZE+50) || (this.dx <= 0 && this.x <= -50))
 	},

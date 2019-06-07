@@ -14,8 +14,9 @@ TimedScoreStage.prototype.update = function() {
 }
 TimedScoreStage.prototype.init = function(diffMult) {
 	var eachMult = Math.sqrt(diffMult)
-	this.timeLeft = Math.ceil(this.timeLimit / eachMult);
 	this.scoreGoal = Math.floor(this.baseScoreGoal * eachMult);
+	this.timeLimit = Math.ceil(this.baseTimeLimit / eachMult);
+	this.timeLeft = this.timeLimit;
 	this.delayPopper = new WeightPopper(1.2,
 		new WeightPopperTicket(this.maxPushDelay*.8, 1),
 		new WeightPopperTicket(this.maxPushDelay, 1),
@@ -52,8 +53,9 @@ TimedScoreStage.prototype.drawHUD = function() {
 	ctx.strokeRect(5, 12, pointwidth, 10);
 }
 TimedScoreStage.prototype.getScoreLines = function() {
-	var ack = accHits / (accHits + this.accFallen);
 	return [
+		{name:"BASE:", val:this.score},
+		accuracyLine(),
 		{name:"TIME:", val:this.timeLeft*2},
 	];
 }

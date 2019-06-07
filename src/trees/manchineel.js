@@ -24,6 +24,7 @@ Manchineel.prototype.affixEx = function(obj, punt) {
 }
 Manchineel.prototype.spawnFruit = function() {
 	//var fruitOffsetMin = this.width/2 + ManchineelFruit.prototype.radius;
+	playSFX("fall");
 	breads.push(new ManchineelFruit(this.x + (Math.random()>.5 ? 1 : -1) * (this.width/2 + ManchineelFruit.prototype.radius + Math.random()*this.fruitOffsetRange)));
 }
 
@@ -33,7 +34,7 @@ function ManchineelFruit(x) {
 }
 ManchineelFruit.prototype = Object.create(BreadBase);
 ManchineelFruit.prototype.name = "Manchineel";
-ManchineelFruit.prototype.description = "A dangerous tree that produces poisonous fruit. Hit the fruit before it gets to you.";
+ManchineelFruit.prototype.description = "Poisonous fruit. Hit it before it gets to you.";
 ManchineelFruit.prototype.image = makeImage("src/breadsprites/manchineel.png");
 ManchineelFruit.prototype.radius = 17;
 ManchineelFruit.prototype.g = .005;
@@ -42,7 +43,7 @@ ManchineelFruit.prototype.dy = 2;
 ManchineelFruit.prototype.baseDamage = 150;
 ManchineelFruit.prototype.update = function() {
 	this.move();
-	if (this.y >= SIZE) {
+	if (this.y-this.radius > SIZE) {
 		this.impact();
 		return false;
 	} else {
@@ -52,7 +53,8 @@ ManchineelFruit.prototype.update = function() {
 ManchineelFruit.prototype.impact = function() {
 	var punt = this.baseDamage;
 	stage.hurtPoison(punt);
-	faders.push(new TextFader("-"+punt, this.x, Math.min(this.y, SIZE-50)));
+	playSFX("hurt");
+	faders.push(new TextFader("-"+punt, this.x, Math.min(this.y, SIZE-45)));
 }
 /* ManchineelFruit.prototype.move = function() {
 	this.x += this.dx;
@@ -77,12 +79,13 @@ ManchineelFruit.prototype.checkHit = function(staplex, stapley, hitTree, collTre
 		return true;
 	}
 }
-ManchineelFruit.prototype.collides = function(x, y) {
+ManchineelFruit.prototype.collides = genCollidesCircle(BREAD_EDGE_MULT);
+/*ManchineelFruit.prototype.collides = function(x, y) {
 	var roff = Math.floor(Math.sqrt(Math.pow(x - this.x, 2) + Math.pow(y - this.y, 2)));
 	if (roff > this.radius)
 		return false;
 	return 1-roff/this.radius*(1-BREAD_EDGE_MULT);
-}
-ManchineelFruit.prototype.getPoints = function(bcoll, tcoll) {
+}*/
+/*ManchineelFruit.prototype.getPoints = function(bcoll, tcoll) {
 	return Math.ceil(this.maxPoints * bcoll * tcoll);
-}
+}*/

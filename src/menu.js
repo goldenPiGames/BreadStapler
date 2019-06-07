@@ -51,7 +51,7 @@ var mainMenu = {
 		//ctx.fillStyle = "#eeeeee";
 		//ctx.fillRect(10, 10, 20, 20);
 		drawText(lg("title"), SIZE/2, 30, 1/2);
-		drawParagraph("(Imagine some kind of cool logo here)", 3, TEXT_HEIGHT+35, SIZE);
+		drawParagraph(lg("mainmenu-subtitle"), 3, TEXT_HEIGHT+35, SIZE);
 		this.buttons.forEach(oj=>oj.draw());
 	},
 	click : function(x, y) {

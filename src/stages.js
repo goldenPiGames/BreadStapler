@@ -20,6 +20,9 @@ const StageBase = {
 	hurtCurse : function(points) {
 		this.score -= points;
 	},
+	hurtCurse : function(points) {
+		this.score -= points;
+	}
 }
 
 function startNextStage() {
@@ -71,7 +74,7 @@ function World(name, color) {
 	this.hiscore = JSON.parse(localStorage.getItem("breadhiscores"))[this.name];
 }
 World.prototype.tryHiscore = function(kor) {
-	if (!(kor <= this.hiscore)) {
+	if (!this.hiscore || kor > this.hiscore) {
 		this.hiscore = kor;
 		var his = JSON.parse(localStorage.getItem("breadhiscores"));
 		his[this.name] = this.hiscore;

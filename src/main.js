@@ -20,6 +20,7 @@ function startLoading() {
 	addEvents();
 	initSFX();
 	initMusic();
+	sceneScreen.init();
 	/*
 	launchGame();
 }
