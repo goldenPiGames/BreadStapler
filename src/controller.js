@@ -14,7 +14,6 @@ function addEvents() {
 	});
 	eventCatcher.addEventListener("touchstart", function(e) {
 		e.preventDefault();
-		//console.log("ping", e.x, e.y);
 		makeClick(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
 	});
 }

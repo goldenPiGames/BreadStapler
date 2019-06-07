@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-        <meta content="utf-8" http-equiv="encoding">
+	<head>
+		<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+		<meta content="utf-8" http-equiv="encoding">
 		<meta name="viewport" content="width=device-width">
 		<link rel="shortcut icon" type="image/png" href="src/breadsprites/white.png">
 		<title>Bread Stapler</title>
@@ -44,59 +44,58 @@
 				touch-action: manipulation;
 			}
 		</style>
-		<!-- <script src='https://cdn1.kongregate.com/javascripts/kongregate_api.js'></script> -->
-        <script type="text/javascript" src="src/main.js"></script>
-        <script type="text/javascript" src="src/weightpopper.js"></script>
-        <script type="text/javascript" src="src/font.js"></script>
-        <script type="text/javascript" src="src/engine.js"></script>
-        <script type="text/javascript" src="src/screen.js"></script>
-        <script type="text/javascript" src="src/menu.js"></script>
-        <script type="text/javascript" src="src/sfx/sfx.js"></script>
-        <script type="text/javascript" src="src/music/jukebox.js"></script>
-        <script type="text/javascript" src="src/credits.js"></script>
-        <script type="text/javascript" src="src/instructions.js"></script>
-        <script type="text/javascript" src="src/objectives.js"></script>
-        <script type="text/javascript" src="src/game.js"></script>
-        <script type="text/javascript" src="src/controller.js"></script>
-        <script type="text/javascript" src="src/backgrounds.js"></script>
+		<script type="text/javascript" src="src/settings.js"></script>
+		<script type="text/javascript" src="src/lang/lang.js"></script>
+		<script type="text/javascript" src="src/main.js"></script>
+		<script type="text/javascript" src="src/weightpopper.js"></script>
+		<script type="text/javascript" src="src/font.js"></script>
+		<script type="text/javascript" src="src/engine.js"></script>
+		<script type="text/javascript" src="src/screen.js"></script>
+		<script type="text/javascript" src="src/menu.js"></script>
+		<script type="text/javascript" src="src/sfx/sfx.js"></script>
+		<script type="text/javascript" src="src/music/jukebox.js"></script>
+		<script type="text/javascript" src="src/settingsscreen.js"></script>
+		<script type="text/javascript" src="src/credits.js"></script>
+		<script type="text/javascript" src="src/instructions.js"></script>
+		<script type="text/javascript" src="src/game.js"></script>
+		<script type="text/javascript" src="src/controller.js"></script>
+		<script type="text/javascript" src="src/collision.js"></script>
+		<!-- Backgrounds -->
+		<script type="text/javascript" src="src/backgrounds/clear.js"></script>
+		<script type="text/javascript" src="src/backgrounds/forest.js"></script>
 		<!-- Breads -->
-        <script type="text/javascript" src="src/breads/base.js"></script>
-        <script type="text/javascript" src="src/breads/wheat.js"></script>
-        <script type="text/javascript" src="src/breads/rye.js"></script>
-        <script type="text/javascript" src="src/breads/italian.js"></script>
+		<script type="text/javascript" src="src/breads/base.js"></script>
+		<script type="text/javascript" src="src/breads/wheat.js"></script>
+		<script type="text/javascript" src="src/breads/rye.js"></script>
+		<script type="text/javascript" src="src/breads/italian.js"></script>
 		
-        <script type="text/javascript" src="src/staple.js"></script>
+		<script type="text/javascript" src="src/staple.js"></script>
 		<!-- Trees -->
-        <script type="text/javascript" src="src/tree.js"></script>
+		<script type="text/javascript" src="src/trees/tree.js"></script>
+		<script type="text/javascript" src="src/trees/manchineel.js"></script>
+		<script type="text/javascript" src="src/bosses/boss.js"></script>
+		<script type="text/javascript" src="src/bosses/greentreant.js"></script>
+		
+		<script type="text/javascript" src="src/miscfaders.js"></script>
+		<script type="text/javascript" src="src/scene.js"></script>
 		<!-- Stages -->
-        <script type="text/javascript" src="src/stages.js"></script>
-        <script type="text/javascript" src="src/worlds/intro.js"></script>
-        <!-- <script type="text/javascript" src="src/worlds/intro.js"></script> -->
-        <script type="text/javascript" src="src/stageresults.js"></script>
+		<script type="text/javascript" src="src/stages.js"></script>
+		<script type="text/javascript" src="src/objectives/allbread.js"></script>
+		<script type="text/javascript" src="src/objectives/timedscore.js"></script>
+		<script type="text/javascript" src="src/objectives/bossbattle.js"></script>
+		<script type="text/javascript" src="src/worlds/intro.js"></script>
+		<script type="text/javascript" src="src/worlds/green.js"></script>
+		<script type="text/javascript" src="src/stageresults.js"></script>
+		<script type="text/javascript" src="src/stagelost.js"></script>
 		
 		
-    </head>
-    <body id="Body" onresize="setBackgroundWidth()">
+	</head>
+	<body id="Body" onresize="setBackgroundWidth()">
 		<div id="BackgroundBox">
 			<canvas id="GraphicsBox" width="360px" height="360px">Your browser requires Canvas support to play this game.</canvas>
-			<!-- <input id="TextInput" type="text" hidden maxlength="16" style="position:absolute;left:100px;top:300px;width:600px;" /> -->
-			<!-- <div id="EventCatcher" style="overflow:hidden; position: absolute; left: 0px; top: 0px; width: 1200px; height: 900px;"></div> -->
 		</div>
 		
 		<script>
-			//console.log("All js files loaded");
-			const ONLINE = false;
-			var kongregate = {stats:{submit:function(){}}};
-			/*
-			kongregateAPI.loadAPI(function(){
-				window.kongregate = kongregateAPI.getAPI();
-				updateFields();
-				
-				kongregate.services.addEventListener('login', function(){
-					updateFields();
-				});
-			});
-			*/
 			startLoading();
 		</script>
 	</body>

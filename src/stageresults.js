@@ -3,7 +3,7 @@ WORLDS.forEach(function(oj, dex) {
 });
 
 var stageIntroScreen = {
-	continueButton : new Button(SIZE/3, SIZE - 50, SIZE/3, TEXT_HEIGHT+6, "BEGIN", function(){runnee = gameEngine}),
+	continueButton : new Button(SIZE/3, SIZE - 50, SIZE/3, TEXT_HEIGHT+6, "BEGIN", startStageForReal),
 	begin : function() {
 		runnee = this;
 		this.buttons = [
@@ -16,8 +16,13 @@ var stageIntroScreen = {
 			this.duction.x = SIZE/2;
 			this.duction.y = 30+TEXT_HEIGHT*3;
 		}
-		if (stage.music)
-			playMusic(stage.music);
+		if (stage.music) {
+			if (stage.haltMusicBefore) {
+				stopMusic();
+			} else {
+				playMusic(stage.music);
+			}
+		}
 	},
 	update : function() {
 		
@@ -25,10 +30,11 @@ var stageIntroScreen = {
 	draw : function() {
 		if (this.duction.draw)
 			this.duction.draw();
+		ctx.globalAlpha = 1;
 		drawText("WORLD "+worldIndex + " STAGE "+stageIndex, SIZE/2, 0, 1/2);
 		drawText(stage.name, SIZE/2, TEXT_HEIGHT, 1/2);
 		drawText("NEW:"+this.duction.name, SIZE/2, 10+TEXT_HEIGHT*2, 1/2);
-		drawParagraph(this.duction.description, 0, 50+TEXT_HEIGHT*3, SIZE);
+		drawParagraph(this.duction.description, 0, 50+TEXT_HEIGHT*3, SIZE, 0, 0, "#00000040");
 		this.buttons.forEach(oj=>oj.draw());
 	},
 	click : function(x, y) {
@@ -36,10 +42,29 @@ var stageIntroScreen = {
 	},
 }
 
+function startStageForReal() {
+	runnee = gameEngine;
+	if (stage.haltMusicBefore) {
+		playMusic(stage.music);
+	}
+}
+
+function winStage() {
+	(stage.boss ? bossFinishing : stageFinishing).begin();
+}
+
 var stageFinishing = {
+	begin : function () {
+		fadeAllBreads();
+		runnee = this;
+	},
 	update : function() {
 		if (faders.length <= 0) {
-			stageResultsScreen.begin();
+			if (stage.sceneAfter) {
+				sceneScreen.begin(stage.sceneAfter);
+			} else {
+				stageResultsScreen.begin();
+			}
 		}
 	},
 	draw : function() {
@@ -48,30 +73,37 @@ var stageFinishing = {
 	click : doNothing,
 }
 
+function fadeAllBreads() {
+	Array.prototype.push.apply(faders, breads);
+	breads = [];
+}
+
+function accuracyLine() {
+	var acc = Math.min(accHits / accTotal, 1.0);
+	return {name:"ACCURACY:", val:acc, mult:true, valdisp:asPercent(acc)};
+}
+
 var stageResultsScreen = {
 	continueButton : new Button(SIZE/3, SIZE/2+TEXT_HEIGHT*2, SIZE/3, TEXT_HEIGHT+6, "NEXT", startNextStage),
 	begin : function() {
+		var thisser = this;
 		runnee = this;
 		this.buttons = [
 			this.continueButton,
 		];
-		var accuracy = Math.min(accHits / accTotal, 1.0);
-		this.scores = [
-			{name:"BASE:", val:stageScore},
-			{name:"ACCURACY:", val:accuracy, mult:true, valdisp:asPercent(accuracy)},
-		].concat(stage.getScoreLines());
-		stageScore = 0;
+		this.scores = stage.getScoreLines();
+		this.stageTotal = 0;
 		var mult = 1;
 		this.scores.forEach(function(oj) {
 			if (!oj.mult) {
-				stageScore += oj.val;
+				thisser.stageTotal += oj.val;
 			} else {
 				mult *= oj.val;
 			}
 		});
-		//console.log(stageScore, mult);
-		stageScore = Math.ceil(stageScore * mult);
-		totalScore += stageScore;
+		//console.log(this.stageTotal, mult);
+		this.stageTotal = Math.ceil(this.stageTotal * mult);
+		totalScore += this.stageTotal;
 	},
 	update : function() {
 		
@@ -81,7 +113,7 @@ var stageResultsScreen = {
 			drawText(oj.name, SIZE/2, TEXT_HEIGHT*dex, 1);
 			drawText(oj.valdisp || oj.val, SIZE/2, TEXT_HEIGHT*dex, 0);
 		});
-		drawText("STAGE:", SIZE/2, SIZE/2, 1); drawText(stageScore, SIZE/2, SIZE/2, 0);
+		drawText("STAGE:", SIZE/2, SIZE/2, 1); drawText(this.stageTotal, SIZE/2, SIZE/2, 0);
 		drawText("TOTAL:", SIZE/2, SIZE/2+TEXT_HEIGHT, 1); drawText(totalScore, SIZE/2, SIZE/2+TEXT_HEIGHT, 0);
 		this.buttons.forEach(oj=>oj.draw());
 	},
@@ -93,10 +125,7 @@ var stageResultsScreen = {
 var worldFinishedScreen = {
 	mainMenuButton : new TextButton("CONTINUE", function(){worldSelect.begin();}, SIZE/2, SIZE*2/3, 1/2, 0),
 	begin : function() {
-		var saveword = "world"+worldIndex+"highscore";
-		var prevBest = parseInt(localStorage.getItem(saveword));
-		if (!(prevBest > totalScore))
-			localStorage.setItem(saveword, totalScore);
+		this.newr = world.tryHiscore(totalScore);
 		runnee = this;
 	},
 	update : function() {
@@ -105,23 +134,8 @@ var worldFinishedScreen = {
 	draw : function() {
 		drawText("WORLD "+world.index+" COMPLETE!", SIZE/2, SIZE/3, 1/2);
 		drawText("SCORE:", SIZE/2, SIZE/2, 1); drawText(totalScore, SIZE/2, SIZE/2, 0);
-		this.mainMenuButton.draw();
-	},
-	click : function(x, y) {
-		this.mainMenuButton.checkClick(x, y);
-	},
-}
-
-var gameOverScreen = {
-	mainMenuButton : new Button(SIZE/4, SIZE*2/3, SIZE/2, 35, "MAIN MENU", function(){runnee = mainMenu}),
-	begin : function() {
-		runnee = this;
-	},
-	update : function() {
-		
-	},
-	draw : function() {
-		drawText("GAME OVER", SIZE/2, SIZE/3, 1/2);
+		if (this.newr)
+			drawText("NEW HISCORE!", SIZE/2, SIZE/2+TEXT_HEIGHT, 1/2);
 		this.mainMenuButton.draw();
 	},
 	click : function(x, y) {
