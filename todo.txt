@@ -1,5 +1,9 @@
+BUGS
+no music unless you tap somewhere first
+
 HELP WANTED
-Background images
+Backgrounds
+Voice acting
 
 TODO
 ? treant mouth
@@ -7,8 +11,10 @@ info for settings (especially STAY)
 voice acting
 ene and accents in font
 lowercase letters
+? change audio to use <source> tags
 
 SOUND EFFECTS
+hit  manchineel
 miss
 shield up/benchmark
 shield down

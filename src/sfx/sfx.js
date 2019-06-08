@@ -1,3 +1,5 @@
+var lastSFXvolume;
+
 function makeCycler(args) {
 	return new SFXCycler(Array.prototype.slice.call(arguments, 0));
 }
@@ -19,13 +21,16 @@ var sfx = {
 	
 }
 function initSFX() {
-	var lastSFXvolume = settings.sfx;
+	lastSFXvolume = settings.sfx;
 	sfx = {
 		"staple0" : makeSound("staple.mp3"),
 		"staple1" : makeSound("staple.mp3"),
 		"staple" : makeCycler("staple0", "staple1"),
 		"hurt" : makeSound("EOUdamage.mp3"), //Etrian Odyssey Untold | Sound Effect #12
-		"fall" : makeSound("fall.mp3"), //some slide whistle effect from somewhere, i don't remember
+		"fall0" : makeSound("fall.mp3"), //edited some slide whistle effect from somewhere, i don't remember
+		"fall1" : makeSound("fall.mp3"),
+		"fall" : makeCycler("fall0", "fall1"),
+		"fruithit" : makeSound("bananaslap.mp3"), // http://soundbible.com/2047-Banana-Slap.html
 		"haltlose" : makeSound("TF2death.mp3"), //Team Fortress 2 | MvM death
 		"bossbeat" : makeSound("KSSbossbeaten.mp3"), //Kirby Super Star | boss beaten
 	}
