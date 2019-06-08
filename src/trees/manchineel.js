@@ -74,6 +74,7 @@ ManchineelFruit.prototype.checkHit = function(staplex, stapley, hitTree, collTre
 	var coll = this.collides(staplex, stapley);
 	if (coll) {
 		accHits ++;
+		playSFX("fruithit");
 		return false;
 	} else {
 		return true;
