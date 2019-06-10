@@ -2,13 +2,13 @@ const TEXT_HEIGHT = 24;
 const TEXT_WIDTH = 16;
 
 var fontsheettable = 
-	["0123456789+-%",
-	 "ABCDEFGHIJKLM",
-	 "NOPQRSTUVWXYZ",
-	 "abcdefghijklm",
-	 "nopqrstuvwxyz",
-	 " ,.?!/<>;:()'è",
-	 //"             ",
+	[" !\"#$%&'()*+,-./",
+	 "0123456789:;<=>?",
+	 "@ABCDEFGHIJKLMNO",
+	 "PQRSTUVWXYZ[\\]^_",
+	 "`abcdefghijklmno",
+	 "pqrstuvwxyz[|]~",
+	 //"Ö           ",
 	];
 var fontset = {
 	image : makeImage("src/font.png")

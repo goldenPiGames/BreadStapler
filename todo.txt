@@ -2,6 +2,7 @@ BUGS
 no music unless you tap somewhere first
 
 HELP WANTED
+Trailers
 Backgrounds
 Voice acting
 
@@ -21,5 +22,5 @@ shield down
 hand beaten
 
 LATER
-jukebox
 pics for instructions
+
