@@ -25,7 +25,12 @@ var creditsScreen = {
 }
 
 function CreditsLine(text, align) {
-	this.text = text;
+	if (!text)
+		this.text = ""; 
+	else if (text.length > SIZE/TEXT_WIDTH)
+		this.text = text.substr(0, Math.floor(SIZE/TEXT_WIDTH)-1) + "…";
+	else
+		this.text = text;
 	this.align = align;
 }
 CreditsLine.prototype.draw = function(y) {
@@ -41,6 +46,9 @@ const CREDITS_LIST = [
 	new CreditsLine(),
 	new CreditsLine("Inspiration", 1/2),
 	new CreditsLine("r/BreadStapledToTrees", 0),
+	new CreditsLine(),
+	new CreditsLine("Trailer", 1/2),
+	new CreditsLine("u/Owl_Towels", 0),
 	new CreditsLine(),
 	new CreditsLine("Music", 1/2),
 ]
