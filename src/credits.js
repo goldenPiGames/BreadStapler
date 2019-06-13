@@ -48,7 +48,8 @@ const CREDITS_LIST = [
 	new CreditsLine("r/BreadStapledToTrees", 0),
 	new CreditsLine(),
 	new CreditsLine("Trailer", 1/2),
-	new CreditsLine("u/Owl_Towels", 0),
+	new CreditsLine("OwlTowel", 0),
+	new CreditsLine("(u/Owl_Towels)", 1/8),
 	new CreditsLine(),
 	new CreditsLine("Music", 1/2),
 ]
