@@ -39,6 +39,7 @@ const gameEngine = {
 		faders = faders.filter(oj=>oj.drawAfter());
 		ctx.globalAlpha = 1;
 		breads.forEach(oj=>oj.draw());
+		staples.forEach(oj => oj.draw());
 		stage.drawHUD();
 	},
 	click : function(ix, iy) {

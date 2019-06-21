@@ -17,7 +17,7 @@ WhiteBread.prototype.reset = function() {
 		side = Math.random()>=.5;
 	this.y = 135 + 180*Math.random();
 	this.dy = -0.5-Math.random();
-	this.x = side ? SIZE + 50 : -50;
+	this.x = side ? SIZE + this.width/2 : -this.width/2;
 	this.dx = (side?-1:1) * 2;
 	return this;
 }
@@ -44,7 +44,7 @@ WholeWheatBread.prototype.reset = function() {
 		side = Math.random()>=.5;
 	this.y = 135 + 180*Math.random();
 	this.dy = -0.7-Math.random();
-	this.x = side ? SIZE + 50 : -50;
+	this.x = side ? SIZE + this.width/2 : -this.width/2;
 	this.dx = (side?-1:1) * 3;
 	return this;
 }

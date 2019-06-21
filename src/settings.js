@@ -31,7 +31,14 @@ const OPTIONS_LIST = [
 		title : "Stay",
 		type : "portion",
 		default : 1/2,
-		steps : 4,
+		steps : 10,
+	},
+	{
+		name : "hudalpha",
+		title : "HUD",
+		type : "portion",
+		default : .7,
+		steps : 10,
 	},
 ]
 

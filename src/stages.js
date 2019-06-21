@@ -8,6 +8,7 @@ var accTotal;
 
 const StageBase = {
 	score : 0,
+	delay : 0,
 	drawBackground() {
 		this.background.draw();
 	},
@@ -20,7 +21,7 @@ const StageBase = {
 	hurtCurse : function(points) {
 		this.score -= points;
 	},
-	hurtCurse : function(points) {
+	hurtImpact : function(points) {
 		this.score -= points;
 	}
 }

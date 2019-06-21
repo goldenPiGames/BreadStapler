@@ -1,8 +1,14 @@
+
 function Staple(x, y, t = 0, ) {
 	this.x = x;
 	this.y = y;
 	this.t = t;
 }
+Staple.prototype.name = lg("staple-name");
+Staple.prototype.description = lg("staple-desc");
+Staple.prototype.sprites = makeSprites("src/staplesheet.png", {
+	thunked : {x:0, y:0, width:10, height:3},
+});
 Staple.prototype.update = function() {
 	var thisser = this;
 	if (this.t > 0) {
@@ -51,8 +57,5 @@ Staple.prototype.drawAfter = function() {
 	this.fade -= 1/40;
 	return (this.fade > 0);
 }
-Staple.prototype.sprites = makeSprites("src/staplesheet.png", {
-	thunked : {x:0, y:0, width:10, height:3},
-});
 
 

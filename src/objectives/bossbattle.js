@@ -43,7 +43,7 @@ BossBattleStage.prototype.hurtImpact = function(points) {
 	this.playerHP -= points;
 }
 BossBattleStage.prototype.drawHUD = function() {
-	ctx.globalAlpha = .7;
+	ctx.globalAlpha = settings.hudalpha;
 	ctx.lineWidth = 2;
 	ctx.strokeStyle = "#000000";
 	ctx.fillStyle = "#FF0000";
@@ -57,6 +57,8 @@ BossBattleStage.prototype.drawHUD = function() {
 	var playerwidth = (SIZE-BAR_MARGINS*2) * (this.playerHP/this.playerMaxHP);
 	ctx.fillRect(BAR_MARGINS, SIZE-BAR_HEIGHT-BAR_MARGINS, playerwidth, BAR_HEIGHT);
 	ctx.strokeRect(BAR_MARGINS, SIZE-BAR_HEIGHT-BAR_MARGINS, playerwidth, BAR_HEIGHT);
+	if (stage.delay)
+		drawText("DELAY:"+stage.delay, 0, SIZE-TEXT_HEIGHT-BAR_HEIGHT-2*BAR_MARGINS, 0);
 }
 BossBattleStage.prototype.getScoreLines = function() {
 	return [

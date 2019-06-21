@@ -24,6 +24,8 @@ const lang_en = {
 	"world-green" : "GREEN",
 	"allbread" : "Staple All Bread",
 	"allbread-desc" : "Staple all bread to the tree. Bread that falls off screen will return later. You cannot lose. Just go for a high score.",
+	"staple-name" : "Staple",
+	"staple-desc" : "A metal fastener used to affix bread to trees.",
 	"greentreant-name" : "Green Treant",
 	"greentreant-desc" : "A monstrous tree that seems to have some significance.",
 	"lostscreen-head" : "STAGE LOST",

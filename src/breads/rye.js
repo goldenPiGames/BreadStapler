@@ -17,7 +17,7 @@ RyeBread.prototype.reset = function() {
 		side = Math.random()>=.5;
 	this.y = 270 + 90*Math.random();
 	this.dy = -2.0-Math.random()*1.5;
-	this.x = side ? SIZE + 50 : -50;
+	this.x = side ? SIZE + this.width/2 : -this.width/2;
 	this.dx = (side?-1:1) * 2;
 	return this;
 }
@@ -41,7 +41,7 @@ Pumpernickel.prototype.reset = function() {
 		side = Math.random()>=.5;
 	this.y = 300 + 60*Math.random();
 	this.dy = -3.0-Math.random()*1.8;
-	this.x = side ? SIZE + 50 : -50;
+	this.x = side ? SIZE + this.width/2 : -this.width/2;
 	this.dx = (side?-1:1) * 2;
 	return this;
 }
@@ -66,7 +66,7 @@ MarbleRye.prototype.reset = function() {
 		side = Math.random()>=.5;
 	this.y = 270 + 90*Math.random();
 	this.dy = -2.0-Math.random()*1.5;
-	this.x = side ? SIZE + 50 : -50;
+	this.x = side ? SIZE + this.width/2 : -this.width/2;
 	this.dx = (side?-1:1) * this.basedx;
 	return this;
 }

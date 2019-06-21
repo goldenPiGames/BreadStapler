@@ -23,7 +23,7 @@ AllBreadStage.prototype.breadFell = function(slice) {
 	];
 }*/
 AllBreadStage.prototype.drawHUD = function() {
-	ctx.globalAlpha = .7;
+	ctx.globalAlpha = settings.hudalpha;
 	var HUDlines = [
 		"SCORE:"+fillLeft(this.score, 6, "0"),
 		"LEFT:" + fillLeft(this.totalLeft(), 2, "0"),
@@ -31,6 +31,8 @@ AllBreadStage.prototype.drawHUD = function() {
 	HUDlines.forEach(function(oj, dex) {
 		drawText(oj, 3, dex*TEXT_HEIGHT+3, 0);
 	});
+	if (stage.delay)
+		drawText("DELAY:"+stage.delay, 0, SIZE-TEXT_HEIGHT, 0);
 }
 AllBreadStage.prototype.getScoreLines = function() {
 	var got = accHits / (accHits + this.accFallen);

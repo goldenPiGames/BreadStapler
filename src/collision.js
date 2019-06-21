@@ -8,6 +8,16 @@ function genCollidesRect(edgeVal) {
 	}
 }
 
+function genCollidesRectHoriz(edgeVal) {
+	return function(x, y) {
+		var xoff = Math.floor(Math.abs(x - this.x));
+		var yoff = Math.floor(Math.abs(y - this.y));
+		if (xoff > this.width/2 || yoff > this.height/2)
+			return false;
+		return 1-xoff/this.width*2*(1-edgeVal);
+	}
+}
+
 function genCollidesPillar(edgeVal) {
 	return function(x, y) {
 		var xoff = Math.floor(Math.abs(x - this.x));

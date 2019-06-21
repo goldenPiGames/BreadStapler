@@ -33,7 +33,7 @@ TimedScoreStage.prototype.breadFell = function(slice) {
 	];
 }*/
 TimedScoreStage.prototype.drawHUD = function() {
-	ctx.globalAlpha = .7;
+	ctx.globalAlpha = settings.hudalpha;
 	/*var HUDlines = [
 		"SCORE:"+fillLeft(this.score, 6, "0"),
 		"GOAL: " + fillLeft(this.scoreGoal, 6, "0"),
@@ -51,6 +51,8 @@ TimedScoreStage.prototype.drawHUD = function() {
 	var pointwidth = (SIZE-10) * (this.score/this.scoreGoal);
 	ctx.fillRect(5, 12, pointwidth, 10);
 	ctx.strokeRect(5, 12, pointwidth, 10);
+	if (stage.delay)
+		drawText("DELAY:"+stage.delay, 0, SIZE-TEXT_HEIGHT, 0);
 }
 TimedScoreStage.prototype.getScoreLines = function() {
 	return [
