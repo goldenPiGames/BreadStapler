@@ -93,10 +93,11 @@ function WaterTimedStage(diffMult = 1) {
 WaterTimedStage.prototype = Object.create(TimedScoreStage.prototype);
 WaterTimedStage.prototype.name = "Moldy Hardtack";
 //TwoTimeStage.prototype.music = "Strategy 3";
-WaterTimedStage.prototype.introducing = {
+/*WaterTimedStage.prototype.introducing = {
 	name : "Difficulty",
 	description : "You might fail on this level. But don't worry - if you do, you can retry with lower difficulty and score.",
-}
+}*/
+WaterTimedStage.prototype.delay = 15;
 WaterTimedStage.prototype.baseScoreGoal = 2200;
 WaterTimedStage.prototype.baseTimeLimit = 25*60;
 WaterTimedStage.prototype.maxPushDelay = 40;
@@ -110,7 +111,7 @@ function WaterBossStage(diffMult = 1) {
 		);
 	trees = [];
 	this.init(diffMult);
-	this.background = new BGForest();
+	this.background = new BGUnderwater();
 }; world.stages.push(WaterBossStage);
 WaterBossStage.prototype = Object.create(BossBattleStage.prototype);
 WaterBossStage.prototype.name = "Water Logged";
@@ -118,4 +119,7 @@ WaterBossStage.prototype.music = "War of the Pianos";
 WaterBossStage.prototype.introducing = WaterTreant;
 WaterBossStage.prototype.bossConstructor = WaterTreant;
 WaterBossStage.prototype.basePlayerHP = 2400;
-WaterBossStage.prototype.maxPushDelay = 35;
+WaterBossStage.prototype.delay = 15;
+WaterBossStage.prototype.delayDuringPressure = 60;
+WaterBossStage.prototype.delayAfterPressure = 30;
+WaterBossStage.prototype.maxPushDelay = 90;

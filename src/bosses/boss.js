@@ -1,7 +1,7 @@
 const STAPLE_DAMAGE = 5;
 
-function Boss() {
-	this.init();
+function Boss(diffMult = 1) {
+	this.init(diffMult);
 }
 Boss.prototype = Object.create(TreeBase);
 Boss.prototype.name = "Boss";
@@ -28,7 +28,6 @@ Boss.prototype.respondFall = function(slice) {
 }
 Boss.prototype.pushBreadNormally = function() {
 	return true;
-	//return !this.shieldActive;
 }
 Boss.prototype.affix = function(obj, punt) {
 	//console.log(obj, punt)

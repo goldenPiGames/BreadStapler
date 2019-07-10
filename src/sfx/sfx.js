@@ -31,8 +31,10 @@ function initSFX() {
 		"fall1" : makeSound("fall.mp3"),
 		"fall" : makeCycler("fall0", "fall1"),
 		"fruithit" : makeSound("bananaslap.mp3"), // http://soundbible.com/2047-Banana-Slap.html
+		"pushhit" : makeSound("volleyball.mp3"), //https://www.soundsnap.com/694sport_squadra_pallavolo_pallone_cade
 		"haltlose" : makeSound("TF2death.mp3"), //Team Fortress 2 | MvM death
 		"bossbeat" : makeSound("KSSbossbeaten.mp3"), //Kirby Super Star | boss beaten
+		"charge" : makeSound("BANK_2E_INSTR_0008_SND_0000.wav"), //Paper Mario | Forever Forest
 	}
 /*	SFX_NAMES.forEach(function(oj) {
 		var fec = document.createElement("audio");

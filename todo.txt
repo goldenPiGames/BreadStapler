@@ -5,9 +5,10 @@ HELP WANTED
 Trailers
 Backgrounds
 Voice acting
+Translations
 
 TODO
-display delay in lower-left corner on intro & game
+water hand fingers
 adjust final score by difficulty
 info for settings (especially STAY)
 jukebox: multiple pages, title, artist

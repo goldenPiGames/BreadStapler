@@ -1,22 +1,125 @@
-function GreenTreant(diffMult) {
-	this.init(diffMult);
-	this.x = SIZE/2;
-	this.benchmarks = [
-		new Benchmark(.8, ()=>this.startStream(false)),
-		new Benchmark(.6, ()=>this.startRain(false)),
-		new Benchmark(.4, ()=>this.startStream(true)),
-		new Benchmark(.2, ()=>this.startRain(true)),
-	];
-	this.leftEye = new GreenTreantEye(this, false);
-	this.rightEye = new GreenTreantEye(this, true);
-	this.returnNeutral();
+class GreenTreant extends Treant {
+	constructor(diffMult) {
+		super(diffMult);
+		this.x = SIZE/2;
+		this.benchmarks = [
+			new Benchmark(.8, ()=>this.startStream(false)),
+			new Benchmark(.6, ()=>this.startRain(false)),
+			new Benchmark(.4, ()=>this.startStream(true)),
+			new Benchmark(.2, ()=>this.startRain(true)),
+		];
+		this.leftEye = new TreantEye(this, false);
+		this.rightEye = new TreantEye(this, true);
+		this.returnNeutral();
+	}
+	returnNeutral() {
+		this.shieldActive = false;
+		this.activeBenchmark = null;
+		this.updateEx = this.updateNeutral;
+	}
+	updateNeutral() {
+		this.checkBenchmarks();
+		this.leftEye.update();
+		this.rightEye.update();
+		this.fruitDelay -= 2 + PRound(3*(1-this.getHPPortion()));
+		if (this.fruitDelay <= 0) {
+			this.spawnFruit();
+			this.fruitDelay += this.fruitDelayMax;
+		}
+	}
+	respondFall(slice) {
+		if (this.hand) {
+			this.hand.respondFall(slice);
+		} else if (!this.shieldActive) {
+			if (!slice.cursed)
+				this.rightEye.startCounterGleam();
+		}
+	}
+	draw() {
+		ctx.globalAlpha = 1;
+		drawSprite(this.sprites.trunk, this.x, 0, 1/2, 0);
+		this.leftEye.draw(!this.shieldActive);
+		this.rightEye.draw(!this.shieldActive);
+		if (settings.stay) {
+			ctx.globalAlpha = settings.stay/2;
+			this.affixed.forEach(oj => oj.draw());
+		}
+		ctx.globalAlpha = 1;
+		if (this.shieldActive) {
+			drawSprite(this.sprites.shield, this.x, 0, 1/2, 0);
+		}
+	}
+	startRain(second) {
+		this.shieldActive = true;
+		this.updateEx = this.updateRain;
+		this.rainLeft = this.rainTotal;
+		this.fruitDelay = 20;
+		this.rainDelay = this.rainDelayBase*(second?.8:1.2)/this.diffMult;
+	}
+	updateRain() {
+		this.fruitDelay--;
+		if (this.fruitDelay <= 0) {
+			this.spawnFruit();
+			this.fruitDelay = PRound(this.fruitDelay + this.rainDelay);
+			this.rainLeft --;
+		}
+		if (this.rainLeft <= 0) {
+			this.updateEx = this.updateRainEnd;
+		}
+	}
+	updateRainEnd() {
+		if (breads.length <= 2) {
+			this.fruitDelay = this.fruitDelayMax;
+			this.returnNeutral();
+		}
+	}
+	startStream(isRight) {
+		this.shieldActive = true;
+		this.updateEx = this.updateStreamIntro;
+		this.hand = new GreenTreantHand(this.diffMult, isRight);
+		trees.push(this.hand);
+		this.untilGood = 5;
+		this.streamDelay = 0;
+		this.streamDelayMax = isRight ? this.streamDelayBase*(1-(.3*this.diffMult)) : this.streamDelayBase;
+	}
+	updateStreamIntro() {
+		if (breads.length <= 0 && this.hand.isReady()) {
+			this.hand.openUp();
+			this.updateEx = this.updateStream;
+		}
+	}
+	updateStream() {
+		this.streamDelay--;
+		if (this.streamDelay <= 0) {
+			if (this.untilGood <= 0) {
+				this.hand.spawnBread(true);
+				this.untilGood = Math.round(this.untilGoodBase*(.75+.5*Math.random()));
+			} else {
+				this.hand.spawnBread(false);
+				this.untilGood--;
+			}
+			this.streamDelay = this.streamDelayMax;
+		}
+		if (this.hand.isDead()) {
+			this.updateEx = this.updateStreamEnd;
+			trees.splice(trees.indexOf(this.hand), 1);
+			this.hand.addToFaders();
+		}
+	}
+	updateStreamEnd() {
+		if (!faders.includes(this.hand)) {
+			this.shieldActive = false;
+			this.hand = null;
+			this.updateEx = this.updateNeutral;
+		}
+	}
 }
-GreenTreant.prototype = Object.create(Boss.prototype);
+
 GreenTreant.prototype.name = lg("greentreant-name");
 GreenTreant.prototype.description = lg("greentreant-desc");
 GreenTreant.prototype.sprites = makeSprites("src/bosssprites/greentreant.png", {
 	"trunk" : {x:0, y:0, width:120, height:360},
-	"greenshield" : {x:120, y:0, width:120, height:360},
+	"shield" : {x:120, y:0, width:120, height:360},
 	"palm" : {x:240, y:280, width:100, height:80},
 	"finger" : {x:240, y:220, width:23, height:60},
 	"thumb" : {x:263, y:257, width:60, height:23},
@@ -39,139 +142,18 @@ GreenTreant.prototype.sprites = makeSprites("src/bosssprites/greentreant.png", {
 });
 GreenTreant.prototype.baseMaxHP = 3200;
 GreenTreant.prototype.width = 120;
-GreenTreant.prototype.update = function() {
-	this.updateEx();
-}
-GreenTreant.prototype.collidesBase = genCollidesPillar(TREE_EDGE_MULT);
-GreenTreant.prototype.collides = function(x, y) {
-	var bass = this.collidesBase(x, y)
-	if (bass) {
-		if (this.shieldActive) {
-			return .02;
-		} else {
-			return bass + this.leftEye.collides(x, y) + this.rightEye.collides(x, y);
-		}
-	}
-}
-GreenTreant.prototype.returnNeutral = function() {
-	this.shieldActive = false;
-	this.activeBenchmark = null;
-	this.updateEx = this.updateNeutral;
-}
-GreenTreant.prototype.updateNeutral = function() {
-	this.checkBenchmarks();
-	this.leftEye.update();
-	this.rightEye.update();
-	this.fruitDelay -= 2 + PRound(3*(1-this.getHPPortion()));
-	if (this.fruitDelay <= 0) {
-		this.spawnFruit();
-		this.fruitDelay += this.fruitDelayMax;
-	}
-}
+
 GreenTreant.prototype.fruitDelay = 300;
 GreenTreant.prototype.fruitDelayMax = 240;
 GreenTreant.prototype.fruitOffsetRange = 80;
 GreenTreant.prototype.spawnFruit = Manchineel.prototype.spawnFruit;
-GreenTreant.prototype.pushBreadNormally = function() {
-	return !this.shieldActive;
-}
-GreenTreant.prototype.respondFall = function(slice) {
-	if (this.hand) {
-		this.hand.respondFall(slice);
-	} else if (!this.shieldActive) {
-		if (!slice.cursed)
-			this.rightEye.startCounterGleam();
-	}
-}
-GreenTreant.prototype.draw = function() {
-	ctx.globalAlpha = 1;
-	drawSprite(this.sprites.trunk, this.x, 0, 1/2, 0);
-	this.leftEye.draw(!this.shieldActive);
-	this.rightEye.draw(!this.shieldActive);
-	if (settings.stay) {
-		ctx.globalAlpha = settings.stay/2;
-		this.affixed.forEach(oj => oj.draw());
-	}
-	ctx.globalAlpha = 1;
-	if (this.shieldActive) {
-		drawSprite(this.sprites.greenshield, this.x, 0, 1/2, 0);
-	}
-}
-GreenTreant.prototype.purify = function() {
-	this.shieldActive = false;
-	this.leftEye.purify();
-	this.rightEye.purify();
-}
-//------------------------------------------------------------------ Rain -----------------------------------------------------
+
 GreenTreant.prototype.rainTotal = 12;
 GreenTreant.prototype.rainDelayBase = 20;
-GreenTreant.prototype.startRain = function(second) {
-	this.shieldActive = true;
-	this.updateEx = this.updateRain;
-	this.rainLeft = this.rainTotal;
-	this.fruitDelay = 20;
-	this.rainDelay = this.rainDelayBase*(second?.8:1.2)/this.diffMult;
-}
-GreenTreant.prototype.updateRain = function() {
-	this.fruitDelay--;
-	if (this.fruitDelay <= 0) {
-		this.spawnFruit();
-		this.fruitDelay = PRound(this.fruitDelay + this.rainDelay);
-		this.rainLeft --;
-	}
-	if (this.rainLeft <= 0) {
-		this.updateEx = this.updateRainEnd;
-	}
-}
-GreenTreant.prototype.updateRainEnd = function() {
-	if (breads.length <= 2) {
-		this.fruitDelay = this.fruitDelayMax;
-		this.returnNeutral();
-	}
-}
-//------------------------------------------------------------------ Stream ---------------------------------------------------
+
 GreenTreant.prototype.streamDelayBase = RyeBread.prototype.width / Math.abs((new RyeBread()).dx);
 GreenTreant.prototype.untilGoodBase = 8;
-GreenTreant.prototype.startStream = function(isRight) {
-	this.shieldActive = true;
-	this.updateEx = this.updateStreamIntro;
-	this.hand = new GreenTreantHand(this.diffMult, isRight);
-	trees.push(this.hand);
-	this.untilGood = 5;
-	this.streamDelay = 0;
-	this.streamDelayMax = isRight ? this.streamDelayBase*(1-(.3*this.diffMult)) : this.streamDelayBase;
-}
-GreenTreant.prototype.updateStreamIntro = function() {
-	if (breads.length <= 0 && this.hand.isReady()) {
-		this.hand.openUp();
-		this.updateEx = this.updateStream;
-	}
-}
-GreenTreant.prototype.updateStream = function() {
-	this.streamDelay--;
-	if (this.streamDelay <= 0) {
-		if (this.untilGood <= 0) {
-			this.hand.spawnBread(true);
-			this.untilGood = Math.round(this.untilGoodBase*(.75+.5*Math.random()));
-		} else {
-			this.hand.spawnBread(false);
-			this.untilGood--;
-		}
-		this.streamDelay = this.streamDelayMax;
-	}
-	if (this.hand.isDead()) {
-		this.updateEx = this.updateStreamEnd;
-		trees.splice(trees.indexOf(this.hand), 1);
-		this.hand.addToFaders();
-	}
-}
-GreenTreant.prototype.updateStreamEnd = function() {
-	if (!faders.includes(this.hand)) {
-		this.shieldActive = false;
-		this.hand = null;
-		this.updateEx = this.updateNeutral;
-	}
-}
+
 //------------------------------------------------------------------ Hand -----------------------------------------------------
 function GreenTreantHand(diffMult, isRight) {
 	this.init(diffMult);
@@ -277,151 +259,51 @@ GreenTreantHand.prototype.drawAfter = function() {
 	return this.y-this.height/2 <= SIZE;
 }
 
-function GreenTreantFinger(parent, thoff, xoff) {
-	this.parent = parent;
-	this.thoff = thoff;
-	this.xoff = xoff;
-	this.yoff = -this.parent.height/2 + this.height/2 - 5;
-	//this.x = this.parent.x + xoff;
+class GreenTreantFinger extends TreantFinger {
+	constructor(parent, thoff, xoff) {
+		super(parent, xoff);
+		this.thoff = thoff;
+	}
+	draw(fist, theta) {
+		var ygoal;
+		if (fist) {
+			ygoal = -this.parent.height/2 + this.height/2 - 5;
+		} else {
+			ygoal = -this.parent.height/2 - this.height/2 - 5*(1+Math.sin(theta + this.thoff));
+		}
+		if (Math.abs(ygoal - this.yoff) < 1.5) {
+			this.yoff = ygoal;
+		} else {
+			this.yoff = (1-this.catchupMult)*this.yoff + this.catchupMult*ygoal;
+		}
+		super.draw();
+		//drawSprite(this.image, this.parent.x + this.xoff, this.parent.y + this.yoff, 1/2, 1/2);
+	}
 }
-GreenTreantFinger.prototype.image = GreenTreant.prototype.sprites.finger;
-GreenTreantFinger.prototype.width = GreenTreantFinger.prototype.image.width;
-GreenTreantFinger.prototype.height = GreenTreantFinger.prototype.image.height;
+//GreenTreantFinger.prototype.image = GreenTreant.prototype.sprites.finger;
 GreenTreantFinger.prototype.catchupMult = .1;
-GreenTreantFinger.prototype.draw = function(fist, theta) {
-	var ygoal;
-	if (fist) {
-		ygoal = -this.parent.height/2 + this.height/2 - 5;
-		//this.yoff = Math.min(ygoal, Math.max(.7*this.yoff + .3*ygoal, this.yoff + 5));
-	} else {
-		ygoal = -this.parent.height/2 - this.height/2 - 5*(1+Math.sin(theta + this.thoff));
-		//this.yoff = ygoal;
-	}
-	if (Math.abs(ygoal - this.yoff) < 1.5) {
-		this.yoff = ygoal;
-	} else {
-		this.yoff = (1-this.catchupMult)*this.yoff + this.catchupMult*ygoal;
-	}
-	drawSprite(this.image, this.parent.x + this.xoff, this.parent.y + this.yoff, 1/2, 1/2);
-}
-GreenTreantFinger.prototype.addToFaders = function() {
-	this.x = this.parent.x + this.xoff;
-	this.y = this.parent.y + this.yoff;
-	this.dx = -1 + 2*Math.random();
-	this.dy = .5-2*Math.random();
-	faders.push(this);
-}
-GreenTreantFinger.prototype.drawAfter = function() {
-	this.x += this.dx;
-	this.y += this.dy;
-	this.dy += .04;
-	drawSprite(this.image, this.x, this.y, 1/2, 1/2);
-	return this.y-this.height/2 <= SIZE;
-}
 
-function GreenTreantThumb(parent, thoff) {
-	this.parent = parent;
-	this.right = this.parent.right;
-	this.thoff = thoff;
-	this.xoff = 0;
-	this.yoff = this.parent.height/2 - this.height/2 - 0;
+class GreenTreantThumb extends TreantThumb {
+	constructor(parent, thoff) {
+		super(parent, parent.right);
+		this.thoff = thoff;
+	}
+	draw(fist, theta) {
+		var xgoal;
+		if (fist) {
+			xgoal = (this.right?1:-1) * (this.parent.width/2 - this.width/2);
+		} else {
+			xgoal = (this.right?1:-1) * (this.parent.width/2 + this.width/2 + 5*(1+Math.sin(theta + this.thoff)));
+		}
+		if (Math.abs(xgoal - this.xoff) < 1.5) {
+			this.xoff = xgoal;
+		} else {
+			this.xoff = (1-this.catchupMult)*this.xoff + this.catchupMult*xgoal;
+		}
+		drawSprite(this.image, this.parent.x + this.xoff, this.parent.y + this.yoff, 1/2, 1/2);
+	}
 }
-GreenTreantThumb.prototype.image = GreenTreant.prototype.sprites.thumb;
-GreenTreantThumb.prototype.width = GreenTreantThumb.prototype.image.width;
-GreenTreantThumb.prototype.height = GreenTreantThumb.prototype.image.height;
+//GreenTreantThumb.prototype.image = GreenTreant.prototype.sprites.thumb;
+//GreenTreantThumb.prototype.width = GreenTreantThumb.prototype.image.width;
+//GreenTreantThumb.prototype.height = GreenTreantThumb.prototype.image.height;
 GreenTreantThumb.prototype.catchupMult = GreenTreantFinger.prototype.catchupMult;
-GreenTreantThumb.prototype.draw = function(fist, theta) {
-	var xgoal;
-	if (fist) {
-		xgoal = (this.right?1:-1) * (this.parent.width/2 - this.width/2);
-		//this.yoff = Math.min(ygoal, Math.max(.7*this.yoff + .3*ygoal, this.yoff + 5));
-	} else {
-		xgoal = (this.right?1:-1) * (this.parent.width/2 + this.width/2 + 5*(1+Math.sin(theta + this.thoff)));
-		//this.yoff = ygoal;
-	}
-	if (Math.abs(xgoal - this.xoff) < 1.5) {
-		this.xoff = xgoal;
-	} else {
-		this.xoff = (1-this.catchupMult)*this.xoff + this.catchupMult*xgoal;
-	}
-	drawSprite(this.image, this.parent.x + this.xoff, this.parent.y + this.yoff, 1/2, 1/2);
-}
-GreenTreantThumb.prototype.addToFaders = GreenTreantFinger.prototype.addToFaders;
-GreenTreantThumb.prototype.drawAfter = GreenTreantFinger.prototype.drawAfter;
-//------------------------------------------------------------------ Eye ------------------------------------------------------
-function GreenTreantEye(parent, isRight) {
-	this.parent = parent;
-	this.right = isRight;
-	this.x = this.parent.x + (isRight?-1:1)*this.parent.width/5;
-	this.y = SIZE/3;
-}
-GreenTreantEye.prototype.sprites = GreenTreant.prototype.sprites;
-GreenTreantEye.prototype.radius = 12;
-GreenTreantEye.prototype.collides = genCollidesCircle(.8);
-GreenTreantEye.prototype.update = function() {
-	
-}
-GreenTreantEye.prototype.startCounterGleam = function() {
-	stage.hurtImpact(10);
-	faders.push(new TextFader("-10", this.x, this.y+30));
-	faders.push(new EyeGleam(this.x, this.y));
-	playSFX("hurt");
-	this.gleaming = 24;
-}
-GreenTreantEye.prototype.blight = true;
-GreenTreantEye.prototype.draw = function(open) {
-	var spritename = (this.right?"r":"l") + "eye";
-	if (this.gleaming) {
-		this.gleaming = Math.max(this.gleaming-1, 0);
-		//console.log(this.gleaming);
-		spritename += "open";
-	} else if (open != this.lastOpen) {
-		spritename += "partial";
-	} else if (open) {
-		spritename += this.blight ? "angry" : "partial";
-	} else {
-		spritename += "closed";
-	}
-	spritename += this.blight ? "blight" : "pure";
-	//console.log(spritename);
-	drawSprite(this.sprites[spritename], this.x, this.y, .5, .5);
-	this.lastOpen = open;
-}
-GreenTreantEye.prototype.purify = function() {
-	this.blight = false;
-}
-
-function EyeGleam(x, y) {
-	this.x = x;
-	this.y = y;
-	this.theta = Math.random()*Math.PI;
-}
-EyeGleam.prototype.timer = 0;
-EyeGleam.prototype.maxDuration = 20;
-EyeGleam.prototype.drawAfter = function() {
-	this.timer++;
-	this.theta += .13;
-	ctx.globalAlpha = 1 - Math.pow((this.timer/this.maxDuration), 2);
-	//ctx.lineWidth = 3;
-	var ro = 5+this.timer*4;
-	var ri = 4+this.timer/2;
-	var sink = Math.sin(this.theta);
-	var cost = Math.cos(this.theta);
-	ctx.fillStyle = "#00FF00";
-	ctx.beginPath();
-	ctx.moveTo(this.x+cost*ro, this.y+sink*ro);
-	ctx.lineTo(this.x+sink*ri, this.y-cost*ri);
-	ctx.lineTo(this.x-cost*ro, this.y-sink*ro);
-	ctx.lineTo(this.x-sink*ri, this.y+cost*ri);
-	ctx.closePath();
-	ctx.fill();
-	ctx.fillStyle = "#000000";
-	ctx.beginPath();
-	ctx.moveTo(this.x+sink*ro, this.y-cost*ro);
-	ctx.lineTo(this.x+cost*ri, this.y+sink*ri);
-	ctx.lineTo(this.x-sink*ro, this.y+cost*ro);
-	ctx.lineTo(this.x-cost*ri, this.y-sink*ri);
-	ctx.closePath();
-	ctx.fill();
-	return (this.timer < this.maxDuration);
-}

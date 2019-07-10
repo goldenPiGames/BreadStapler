@@ -22,8 +22,8 @@ if (!this.x || this.x < this.width/2 || this.x > SIZE-this.width/2) {
 		var i = 0;
 		var tol = this.width/2;
 		var clear = false;
-		while (!clear && i < 5) {
-			tol = this.width/2 + 50 - 10*i;
+		while (!clear && i < 10) {
+			tol = this.width/2 + 50 - 5*i;
 			x = 20 + (SIZE-40)*Math.random();
 			clear = true;
 			trees.forEach(function(oj) {
@@ -63,6 +63,7 @@ Hardtack.prototype.checkHit = function(staplex, stapley, hitTree, collTree) {
 			this.dx = -this.velhit * (staplex-this.x);
 			this.dy = -this.velhit * (stapley-this.y) - 1;
 			this.timesHit++;
+			playSFX("pushhit");
 			return true;
 		}
 	} else {

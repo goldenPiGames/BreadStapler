@@ -28,6 +28,8 @@ const lang_en = {
 	"staple-desc" : "A metal fastener used to affix bread to trees.",
 	"greentreant-name" : "Green Treant",
 	"greentreant-desc" : "A monstrous tree that seems to have some significance.",
+	"watertreant-name" : "Water Treant",
+	"watertreant-desc" : "A wise underwater tree that attacks with fists, blasts, and pressure.",
 	"lostscreen-head" : "STAGE LOST",
 	"lostscreen-adjust" : "DIFFICULTY ADJUSTMENT",
 	"lostscreen-this" : "THIS STAGE:",

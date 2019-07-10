@@ -36,10 +36,10 @@ const gameEngine = {
 		ctx.globalAlpha = 1;
 		stage.drawBackground();
 		trees.forEach(oj=>oj.draw());
-		faders = faders.filter(oj=>oj.drawAfter());
 		ctx.globalAlpha = 1;
 		breads.forEach(oj=>oj.draw());
 		staples.forEach(oj => oj.draw());
+		faders = faders.filter(oj=>oj.drawAfter());
 		stage.drawHUD();
 	},
 	click : function(ix, iy) {
