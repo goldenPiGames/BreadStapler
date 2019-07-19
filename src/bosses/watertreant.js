@@ -4,8 +4,8 @@ class WaterTreant extends Treant {
 		this.x = SIZE/2;
 		this.benchmarks = [
 			//new Benchmark(.99, ()=>this.startOrbitars(5)),
-			new Benchmark(.85, ()=>this.startFist(false)),
-			new Benchmark(.7, ()=>this.startOrbitars(5)),
+			new Benchmark(.8, ()=>this.startFist(false)),
+			new Benchmark(.6, ()=>this.startOrbitars(5)),
 			new Benchmark(.6, ()=>this.startPressure(true)),
 			new Benchmark(.3, ()=>this.stopPressure(true)),
 			new Benchmark(.3, ()=>this.startFist(true)),
@@ -48,7 +48,7 @@ class WaterTreant extends Treant {
 			}
 		//}
 	}
-	collides = function(x, y) {
+	collides(x, y) {
 		var bass = this.collidesBase(x, y)
 		if (bass) {
 			if (this.shieldActive) {
@@ -115,7 +115,16 @@ class WaterTreant extends Treant {
 	}
 	startPressure() {
 		this.updateEx = this.updatePressure;
+		this.storedBreadPopper = stage.breadPopper;
+		stage.breadPopper = new WeightPopper(1,
+			new WeightPopperTicket(SubRoll, 1)
+		);
 		stage.delay = stage.delayDuringPressure;
+	}
+	switchToHardtack() {
+		stage.breadPopper = new WeightPopper(1,
+			new WeightPopperTicket(Hardtack, 1)
+		);
 	}
 	updatePressure() {
 		this.checkBenchmarks();
@@ -125,6 +134,7 @@ class WaterTreant extends Treant {
 		this.returnNeutral();
 		this.currentBenchmark = null;
 		stage.delay = stage.delayAfterPressure;
+		stage.breadPopper = this.storedBreadPopper;
 	}
 }
 
@@ -299,6 +309,8 @@ OrbitingBlast.prototype.checkHit = function(staplex, stapley, hitTree, collTree)
 	if (coll) {
 		accHits ++;
 		playSFX("fruithit");
+		faders.push(this);
+		this.drawAfter = this.drawAfterDisarmed;
 		return false;
 	} else {
 		return true;
@@ -312,11 +324,20 @@ OrbitingBlast.prototype.explode = function() {
 	stage.hurtImpact(damage);
 	playSFX("hurt");
 	faders.push(this);
+	this.drawAfter = this.drawAfterExploded;
 }
-Staple.prototype.fade = 1;
-Staple.prototype.drawAfter = function() {
+OrbitingBlast.prototype.fade = 1;
+OrbitingBlast.prototype.drawAfterExploded = function() {
 	ctx.globalAlpha = this.fade;
+	this.radius += 1;
 	this.draw();
-	this.fade -= 1/40;
+	this.fade -= 1/30;
 	return (this.fade > 0);
 }
+OrbitingBlast.prototype.drawAfterDisarmed = function() {
+	ctx.globalAlpha = this.fade;
+	this.draw();
+	this.fade -= 1/30;
+	return (this.fade > 0);
+}
+OrbitingBlast.prototype.drawAfter = OrbitingBlast.prototype.drawAfterDisarmed;

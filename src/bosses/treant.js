@@ -7,7 +7,7 @@ class Treant extends Boss {
 		this.leftEye.update();
 		this.rightEye.update();
 	}
-	collides = function(x, y) {
+	collides(x, y) {
 		var bass = this.collidesBase(x, y)
 		if (bass) {
 			if (this.shieldActive) {

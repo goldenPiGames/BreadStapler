@@ -8,10 +8,11 @@ Voice acting
 Translations
 
 TODO
-water hand fingers
+water treant fuse display
+change pressure
 adjust final score by difficulty
 info for settings (especially STAY)
-jukebox: multiple pages, title, artist
+jukebox: title, artist
 voice acting
 ene and accents in font
 lowercase letters
