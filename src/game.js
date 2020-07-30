@@ -4,10 +4,10 @@ var totalScore = 0;
 function startWorld(tos) {
 	if (typeof tos == "number") {
 		worldIndex = tos;
-		world = WORLDS[worldIndex];
+		world = new (WORLDS[worldIndex].cons)();
 	} else {
-		world = tos;
-		worldIndex = world.index;
+		worldIndex = tos.index;
+		world = new (tos.cons)();
 	}
 	diffAdjCurrent = 0;
 	diffAdjAll = 0;

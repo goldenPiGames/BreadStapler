@@ -115,8 +115,8 @@ class GreenTreant extends Treant {
 	}
 }
 
-GreenTreant.prototype.name = lg("greentreant-name");
-GreenTreant.prototype.description = lg("greentreant-desc");
+GreenTreant.prototype.lName = "greentreant-name";
+GreenTreant.prototype.lDesc = "greentreant-desc";
 GreenTreant.prototype.sprites = makeSprites("src/bosssprites/greentreant.png", {
 	"trunk" : {x:0, y:0, width:120, height:360},
 	"shield" : {x:120, y:0, width:120, height:360},
@@ -146,7 +146,7 @@ GreenTreant.prototype.width = 120;
 GreenTreant.prototype.fruitDelay = 300;
 GreenTreant.prototype.fruitDelayMax = 240;
 GreenTreant.prototype.fruitOffsetRange = 80;
-GreenTreant.prototype.spawnFruit = Manchineel.prototype.spawnFruit;
+GreenTreant.prototype.spawnFruit = ManchineelTree.prototype.spawnFruit;
 
 GreenTreant.prototype.rainTotal = 12;
 GreenTreant.prototype.rainDelayBase = 20;
@@ -155,23 +155,97 @@ GreenTreant.prototype.streamDelayBase = RyeBread.prototype.width / Math.abs((new
 GreenTreant.prototype.untilGoodBase = 8;
 
 //------------------------------------------------------------------ Hand -----------------------------------------------------
-function GreenTreantHand(diffMult, isRight) {
-	this.init(diffMult);
-	this.right = isRight;
-	this.x = isRight ? (this.width/2+10) : (SIZE-this.width/2-10);
-	this.y = SIZE + this.height/2+5;
-	var d = isRight ? 1 : -1;
-	this.digits = [
-		new GreenTreantFinger(this, Math.PI*2/5, d*this.width*3/8),
-		new GreenTreantFinger(this, Math.PI*4/5, d*this.width*1/8),
-		new GreenTreantFinger(this, Math.PI*6/5, -d*this.width*1/8),
-		new GreenTreantFinger(this, Math.PI*8/5, -d*this.width*3/8),
-		new GreenTreantThumb(this, 0, isRight),
-	]
+class GreenTreantHand extends Boss {
+	constructor(diffMult, isRight) {
+		super(diffMult);
+		this.right = isRight;
+		this.x = isRight ? (this.width/2+10) : (SIZE-this.width/2-10);
+		this.y = SIZE + this.height/2+5;
+		var d = isRight ? 1 : -1;
+		this.digits = [
+			new GreenTreantFinger(this, Math.PI*2/5, d*this.width*3/8),
+			new GreenTreantFinger(this, Math.PI*4/5, d*this.width*1/8),
+			new GreenTreantFinger(this, Math.PI*6/5, -d*this.width*1/8),
+			new GreenTreantFinger(this, Math.PI*8/5, -d*this.width*3/8),
+			new GreenTreantThumb(this, 0, isRight),
+		]
+	}
+	update() {
+		if (this.opened) {
+			if (this.punching) {
+				this.punching--;
+				if (this.punching == 6) {
+					this.hitPunch();
+				}
+				if (this.punching <= 0) {
+					this.punching = false;
+				}
+			}
+		} else {
+			this.y += this.dy;
+			if (this.y < this.ygoal)
+				this.y = this.ygoal;
+		}
+	}
+	isReady() {
+		return this.y <= this.ygoal;
+	}
+	openUp() {
+		this.opened = true;
+	}
+	draw() {
+		this.drawHPBar();
+		ctx.globalAlpha = 1;
+		drawSprite(this.sprites.palm, this.x, this.y, 1/2, 1/2);
+		this.digittheta = (this.digittheta + .15) % (2*Math.PI);
+		this.digits.forEach(oj=>oj.draw(!this.opened || this.punching, this.digittheta));
+	}
+	spawnBread(good) {
+		var bred = new (good ? RyeBread : MarbleRye)();
+		bred.x = this.x;
+		bred.y = this.y;
+		bred.dx = (this.right?1:-1)*Math.abs(bred.dx);
+		bred.dy = 0;
+		var failstop = 0;
+		while (!bred.hasFallen() && failstop < 300) {
+			bred.move();
+			failstop++;
+		}
+		bred.dx = -bred.dx;
+		bred.dy = -bred.dy;
+		if (good)
+			breads.unshift(bred);
+		else
+			breads.push(bred);
+	}
+	respondFall(slice) {
+		if (this.opened && !slice.cursed && !this.isDead()) {
+			this.startPunch();
+		}
+	}
+	startPunch(slice) {
+		this.punching = 30;
+	}
+	hitPunch() {
+		stage.hurtImpact(this.punchDamage);
+		faders.push(new TextFader("-"+this.punchDamage, this.x, this.y - this.height/3));
+		playSFX("hurt");
+	}
+	addToFaders() {
+		this.dy = 0;
+		faders.push(this);
+		this.digits.forEach((oj)=>oj.addToFaders());
+	}
+	drawAfter() {
+		ctx.globalAlpha = 1;
+		drawSprite(this.sprites.palm, this.x, this.y, 1/2, 1/2);
+		this.dy += .04;
+		this.y += this.dy;
+		return this.y-this.height/2 <= SIZE;
+	}
 }
-GreenTreantHand.prototype = Object.create(Boss.prototype);
-GreenTreantHand.prototype.name = "Green Treant Hand";
-GreenTreantHand.prototype.description = "ZA HANDO";
+GreenTreantHand.prototype.lName = "greentreanthand-name";
+GreenTreantHand.prototype.description = "greentreanthand-desc";
 GreenTreantHand.prototype.sprites = GreenTreant.prototype.sprites;
 GreenTreantHand.prototype.baseMaxHP = 400;
 //GreenTreantHand.prototype.x = SIZE*4/5;
@@ -185,79 +259,6 @@ GreenTreantHand.prototype.punchDamage = 200;
 GreenTreantHand.prototype.punching = 0;
 GreenTreantHand.prototype.digittheta = 0;
 GreenTreantHand.prototype.collides = genCollidesRect(.4);
-GreenTreantHand.prototype.update = function() {
-	if (this.opened) {
-		if (this.punching) {
-			this.punching--;
-			if (this.punching == 6) {
-				this.hitPunch();
-			}
-			if (this.punching <= 0) {
-				this.punching = false;
-			}
-		}
-	} else {
-		this.y += this.dy;
-		if (this.y < this.ygoal)
-			this.y = this.ygoal;
-	}
-}
-GreenTreantHand.prototype.isReady = function() {
-	return this.y <= this.ygoal;
-}
-GreenTreantHand.prototype.openUp = function() {
-	this.opened = true;
-}
-GreenTreantHand.prototype.draw = function() {
-	this.drawHPBar();
-	ctx.globalAlpha = 1;
-	drawSprite(this.sprites.palm, this.x, this.y, 1/2, 1/2);
-	this.digittheta = (this.digittheta + .15) % (2*Math.PI);
-	this.digits.forEach(oj=>oj.draw(!this.opened || this.punching, this.digittheta));
-}
-GreenTreantHand.prototype.spawnBread = function(good) {
-	var bred = new (good ? RyeBread : MarbleRye)();
-	bred.x = this.x;
-	bred.y = this.y;
-	bred.dx = (this.right?1:-1)*Math.abs(bred.dx);
-	bred.dy = 0;
-	var failstop = 0;
-	while (!bred.hasFallen() && failstop < 300) {
-		bred.move();
-		failstop++;
-	}
-	bred.dx = -bred.dx;
-	bred.dy = -bred.dy;
-	if (good)
-		breads.unshift(bred);
-	else
-		breads.push(bred);
-}
-GreenTreantHand.prototype.respondFall = function(slice) {
-	if (this.opened && !slice.cursed && !this.isDead()) {
-		this.startPunch();
-	}
-}
-GreenTreantHand.prototype.startPunch = function(slice) {
-	this.punching = 30;
-}
-GreenTreantHand.prototype.hitPunch = function() {
-	stage.hurtImpact(this.punchDamage);
-	faders.push(new TextFader("-"+this.punchDamage, this.x, this.y - this.height/3));
-	playSFX("hurt");
-}
-GreenTreantHand.prototype.addToFaders = function() {
-	this.dy = 0;
-	faders.push(this);
-	this.digits.forEach((oj)=>oj.addToFaders());
-}
-GreenTreantHand.prototype.drawAfter = function() {
-	ctx.globalAlpha = 1;
-	drawSprite(this.sprites.palm, this.x, this.y, 1/2, 1/2);
-	this.dy += .04;
-	this.y += this.dy;
-	return this.y-this.height/2 <= SIZE;
-}
 
 class GreenTreantFinger extends TreantFinger {
 	constructor(parent, thoff, xoff) {

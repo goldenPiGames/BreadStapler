@@ -1,3 +1,14 @@
-world = new World("sky", "#55AAEE");
-WORLDS.push(world);
+class WorldSky extends World {
+	constructor() {
+		super("sky", "#55AAEE");
+	}
+}
+
+if (settings.dev)
+	WORLDS.push({
+		lName : "world-sky",
+		id : "sky",
+		color : "#55AAEE",
+		cons:WorldSky,
+	});
 

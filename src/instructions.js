@@ -1,8 +1,8 @@
 var instructionsScreen = {
-	backButton : new TextButton("BACK", function(){mainMenu.begin()}, 10, SIZE - 10, 0, 1),
+	backButton : new TextButton("BACK", toMainMenu, 10, SIZE - 10, 0, 1),
 	prevButton : new TextButton("PREV", function(){instructionsScreen.slideIndex--; instructionsScreen.putSlide()}, 10, SIZE - 10, 0, 1),
 	nextButton : new TextButton("NEXT", function(){instructionsScreen.slideIndex++; instructionsScreen.putSlide()}, SIZE-10, SIZE - 10, 1, 1),
-	doneButton : new TextButton("DONE", function(){mainMenu.begin()}, SIZE-10, SIZE - 10, 1, 1),
+	doneButton : new TextButton("DONE", toMainMenu, SIZE-10, SIZE - 10, 1, 1),
 	slideIndex : 0,
 	slideGetters : [
 		function() {

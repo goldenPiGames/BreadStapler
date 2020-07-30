@@ -1,7 +1,7 @@
 const CREDITS_SPEED = 5;
 
 var creditsScreen = {
-	returnButton : new TextButton("BACK", function(){mainMenu.begin()}, SIZE, SIZE, 1, 1),
+	returnButton : new TextButton("BACK", toMainMenu, SIZE, SIZE, 1, 1),
 	begin : function() {
 		runnee = this;
 		this.offset = SIZE;

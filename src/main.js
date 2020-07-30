@@ -6,6 +6,8 @@ var eventCatcher;
 var body;
 var loadingTotal = 0;
 var loadedYet = 0;
+const ALWAYS_RESIZE = false;
+const ERROR_THROW = true; //TODO set this to false for release versions
 
 function startLoading() {
 	body = document.getElementById("Body");
@@ -16,7 +18,9 @@ function startLoading() {
 	
 	eventCatcher = document.getElementById("GraphicsBox");
 	
-	setBackgroundWidth();
+	fitCanvas();
+	window.addEventListener("resize", fitCanvas);
+	
 	addEvents();
 	initSFX();
 	initMusic();
@@ -26,7 +30,7 @@ function startLoading() {
 }
 
 function launchGame() {*/
-	runnee = mainMenu;
+	runnee = new MainMenu();
 	coreEngine.start();
 }
 
@@ -39,6 +43,40 @@ function setBackgroundWidth() {
 	else
 		backDiv.classList.remove("pixellated");
 }
+function fitCanvas(e) {
+	var rekt = backDiv.getBoundingClientRect();
+	//console.log(rekt);
+	if (!document.fullscreen && !ALWAYS_RESIZE && !settings.alwaysStretch && rekt.width > SIZE*2 && rekt.height > SIZE*2) {
+		//console.log("part");
+		canvas.classList.remove("fullscreenWider");
+		canvas.classList.remove("fullscreenTaller");
+		canvas.classList.add("partscreen");
+	} else if (rekt.width/rekt.height >= 1) {
+		//console.log("wider");
+		canvas.classList.remove("partscreen");
+		canvas.classList.remove("fullscreenTaller");
+		canvas.classList.add("fullscreenWider");
+	} else {
+		//console.log("taller");
+		canvas.classList.remove("partscreen");
+		canvas.classList.remove("fullscreenWider");
+		canvas.classList.add("fullscreenTaller");
+	}
+	var size = canvas.getBoundingClientRect().width;
+	//console.log(size);
+	if (size == SIZE*2)
+		backDiv.classList.add("pixellated");
+	else
+		backDiv.classList.remove("pixellated");
+}
+
+function throwMaybe(...args) {
+	if (ERROR_THROW) {
+		throw args[0]
+	} else {
+		console.log(...args);
+	}
+}
 
 function PRound(num, seed) {
 	var whole = Math.floor(num);
@@ -46,14 +84,6 @@ function PRound(num, seed) {
 	if (seed == undefined)
 		return whole + ((Math.random() < partial) ? 1 : 0);
 	return whole + ((seed < partial) ? 1 : 0);
-}
-
-function parse(str) {
-	if (str == "true") return true;
-	if (str == "false") return false;
-	var num = parseFloat(str);
-	if (num == num) return num;
-	return str;
 }
 
 function doNothing() {
@@ -126,8 +156,11 @@ function makeSprites(sauce, sheetData) {
 		sauce = makeImage(sauce);
 	}
 	for (sub in sheetData) {
+		if (sub == "image")
+			throw "You cannot have a sprite named \"image\".";
 		sheetData[sub].image = sauce;
 		sheetData[sub].parent = sheetData;
 	}
+	sheetData.image = sauce;
 	return sheetData;
 }
