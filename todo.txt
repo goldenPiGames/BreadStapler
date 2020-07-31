@@ -5,14 +5,23 @@ HELP WANTED
 Trailers
 Backgrounds
 Voice acting
+Translations
 
 TODO
-? treant mouth
+water treant fuse display
+change pressure
+adjust final score by difficulty
 info for settings (especially STAY)
+jukebox: title, artist
 voice acting
 ene and accents in font
 lowercase letters
+? treant mouth
 ? change audio to use <source> tags
+
+sprites:
+ciabatta
+sub
 
 SOUND EFFECTS
 hit  manchineel

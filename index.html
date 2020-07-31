@@ -17,10 +17,8 @@
 				margin: auto;
 				overflow: hidden;
 				position: absolute;
-				left: 0px;
-				top: 0px;
-				width: 720px;
-				height: 720px;
+				width: 100%;
+				height: 100%;
 				background-color: #000000;
 				border-color: #BBBBBB;
 				border-style: solid;
@@ -29,10 +27,27 @@
 			#GraphicsBox {
 				overflow: hidden;
 				position: absolute;
-				width: 100%;
-				height: 100%;
 				left: 0px;
 				top: 0px;
+			}
+			.partscreen {
+				position: absolute;
+				left: 0px;
+				top: 0px;
+				width: 720px;
+				height: 720px;
+			}
+			.fullscreenWider {
+				display: block;
+				margin-left: auto;
+				margin-right: auto;
+				height: 100%;
+			}
+			.fullscreenTaller {
+				position: absolute;
+				left: 0px;
+				top: 0px;
+				width: 100%;
 			}
 			.pixellated {
 				image-rendering: optimizeSpeed;
@@ -52,11 +67,11 @@
 		<script type="text/javascript" src="src/engine.js"></script>
 		<script type="text/javascript" src="src/screen.js"></script>
 		<script type="text/javascript" src="src/button.js"></script>
-		<script type="text/javascript" src="src/menu.js"></script>
-		<script type="text/javascript" src="src/sfx/sfx.js"></script>
-		<script type="text/javascript" src="src/music/music.js"></script>
-		<script type="text/javascript" src="src/music/jukebox.js"></script>
-		<script type="text/javascript" src="src/settingsscreen.js"></script>
+		<script type="text/javascript" src="src/screens/menu.js"></script>
+		<script type="text/javascript" src="src/audio/sfx.js"></script>
+		<script type="text/javascript" src="src/audio/music.js"></script>
+		<script type="text/javascript" src="src/audio/jukebox.js"></script>
+		<script type="text/javascript" src="src/screens/settingsscreen.js"></script>
 		<script type="text/javascript" src="src/credits.js"></script>
 		<script type="text/javascript" src="src/instructions.js"></script>
 		<script type="text/javascript" src="src/game.js"></script>
@@ -65,18 +80,25 @@
 		<!-- Backgrounds -->
 		<script type="text/javascript" src="src/backgrounds/clear.js"></script>
 		<script type="text/javascript" src="src/backgrounds/forest.js"></script>
+		<script type="text/javascript" src="src/backgrounds/underwater.js"></script>
+		<script type="text/javascript" src="src/backgrounds/flying.js"></script>
 		<!-- Breads -->
 		<script type="text/javascript" src="src/breads/base.js"></script>
 		<script type="text/javascript" src="src/breads/wheat.js"></script>
 		<script type="text/javascript" src="src/breads/rye.js"></script>
 		<script type="text/javascript" src="src/breads/italian.js"></script>
+		<script type="text/javascript" src="src/breads/sub.js"></script>
+		<script type="text/javascript" src="src/breads/cracker.js"></script>
+		<script type="text/javascript" src="src/breads/bagel.js"></script>
 		
 		<script type="text/javascript" src="src/staple.js"></script>
 		<!-- Trees -->
 		<script type="text/javascript" src="src/trees/tree.js"></script>
 		<script type="text/javascript" src="src/trees/manchineel.js"></script>
 		<script type="text/javascript" src="src/bosses/boss.js"></script>
+		<script type="text/javascript" src="src/bosses/treant.js"></script>
 		<script type="text/javascript" src="src/bosses/greentreant.js"></script>
+		<script type="text/javascript" src="src/bosses/watertreant.js"></script>
 		
 		<script type="text/javascript" src="src/miscfaders.js"></script>
 		<script type="text/javascript" src="src/scene.js"></script>
@@ -87,12 +109,16 @@
 		<script type="text/javascript" src="src/objectives/bossbattle.js"></script>
 		<script type="text/javascript" src="src/worlds/intro.js"></script>
 		<script type="text/javascript" src="src/worlds/green.js"></script>
-		<script type="text/javascript" src="src/stageresults.js"></script>
-		<script type="text/javascript" src="src/stagelost.js"></script>
+		<script type="text/javascript" src="src/worlds/water.js"></script>
+		<script type="text/javascript" src="src/worlds/sky.js"></script>
+		
+		<script type="text/javascript" src="src/screens/stageintro.js"></script>
+		<script type="text/javascript" src="src/screens/stageresults.js"></script>
+		<script type="text/javascript" src="src/screens/stagelost.js"></script>
 		
 		
 	</head>
-	<body id="Body" onresize="setBackgroundWidth()">
+	<body id="Body">
 		<div id="BackgroundBox">
 			<canvas id="GraphicsBox" width="360px" height="360px">Your browser requires Canvas support to play this game.</canvas>
 		</div>

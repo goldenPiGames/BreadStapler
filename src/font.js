@@ -8,6 +8,7 @@ var fontsheettable =
 	 "PQRSTUVWXYZ[\\]^_",
 	 "`abcdefghijklmno",
 	 "pqrstuvwxyz[|]~",
+	 "\u2026",
 	 //"…           ",
 	];
 var fontset = {

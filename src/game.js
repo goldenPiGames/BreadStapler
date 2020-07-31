@@ -4,10 +4,10 @@ var totalScore = 0;
 function startWorld(tos) {
 	if (typeof tos == "number") {
 		worldIndex = tos;
-		world = WORLDS[worldIndex];
+		world = new (WORLDS[worldIndex].cons)();
 	} else {
-		world = tos;
-		worldIndex = world.index;
+		worldIndex = tos.index;
+		world = new (tos.cons)();
 	}
 	diffAdjCurrent = 0;
 	diffAdjAll = 0;
@@ -36,9 +36,10 @@ const gameEngine = {
 		ctx.globalAlpha = 1;
 		stage.drawBackground();
 		trees.forEach(oj=>oj.draw());
-		faders = faders.filter(oj=>oj.drawAfter());
 		ctx.globalAlpha = 1;
 		breads.forEach(oj=>oj.draw());
+		staples.forEach(oj => oj.draw());
+		faders = faders.filter(oj=>oj.drawAfter());
 		stage.drawHUD();
 	},
 	click : function(ix, iy) {

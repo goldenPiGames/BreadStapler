@@ -1,50 +1,59 @@
 var trees;
 const TREE_EDGE_MULT = .90;
 
-const TreeBase = {
-	y : 0,
-	height : SIZE,
-	update : doNothing,
-	draw : function() {
+class TreeBase {
+	constructor() {
+		this.affixed = [];
+	}
+	update() {
+		
+	}
+	draw() {
 		ctx.globalAlpha = 1;
 		drawSprite(this.image, this.x, 0, 1/2, 0);
 		if (settings.stay) {
 			ctx.globalAlpha = settings.stay;
 			this.affixed.forEach(oj => oj.draw());
 		}
-	},
-	collides : genCollidesPillar(TREE_EDGE_MULT),
+	}
 	/*collides : function(x, y) {
 		var xoff = Math.floor(Math.abs(x - this.x));
 		if (xoff > this.width/2)
 			return false;
 		return 1-(xoff/this.width)*2*(1-TREE_EDGE_MULT);
-	},*/
-	affix : function(obj, punt) {
+	}*/
+	affix(obj, punt) {
 		//console.log(obj, punt)
 		this.affixed.push(obj);
 		this.affixEx(obj, punt);
-	},
-	affixEx : doNothing,
+	}
+	affixEx() {
+		
+	}
 }
+TreeBase.prototype.y = 0;
+TreeBase.prototype.height = SIZE;
+TreeBase.prototype.collides = genCollidesPillar(TREE_EDGE_MULT);
 
-function Oak(x = SIZE/2) {
-	this.x = x;
-	this.affixed = [];
+class Oak extends TreeBase {
+	constructor(x = SIZE/2) {
+		super();
+		this.x = x;
+	}
 }
-Oak.prototype = Object.create(TreeBase);
-Oak.prototype.name = "Oak";
-Oak.prototype.description = "A large and tough tree. Staple some bread to it. Sometimes found in small groups.";
+Oak.prototype.lName = "oak-name";
+Oak.prototype.lDesc = "oak-desc";
 Oak.prototype.image = makeImage("src/treesprites/oak.png");
 Oak.prototype.width = 90;
 
-function Birch(x = SIZE/2) {
-	this.x = x;
-	this.affixed = [];
+class Birch extends TreeBase {
+	constructor(x = SIZE/2) {
+		super();
+		this.x = x;
+	}
 }
-Birch.prototype = Object.create(TreeBase);
-Birch.prototype.name = "Birch";
-Birch.prototype.description = "On the thin side, and often found in groups. Otherwise just like any other tree.";
+Birch.prototype.lName = "birch-name";
+Birch.prototype.lDesc = "oak-desc";
 Birch.prototype.image = makeImage("src/treesprites/birch.png");
 Birch.prototype.width = 60;
 

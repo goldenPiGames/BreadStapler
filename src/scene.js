@@ -63,28 +63,32 @@ var sceneScreen = {
 	},
 }
 
-function Scene() {
-	
-};
-Scene.prototype.lineIndex = 0;
-Scene.prototype.advance = function() {
-	this.lineIndex++;
-}
-Scene.prototype.isOver = function() {
-	return this.lineIndex >= this.lines.length;
-}
-Scene.prototype.getClosedCaptions = function() {
-	return this.lines[this.lineIndex].text;
-}
-Scene.prototype.getAudioPath = function() {
-	return "src/voice/"+settings.lang+"/"+this.lines[this.lineIndex].name+".mp3";
-}
-
-function CutsceneLine(name) {
-	this.name = name;
-	this.text = lg(name);
-}
-CutsceneLine.prototype.canAdvance = function() {
-	return true;
+class Scene {
+	constructor(stage) {
+		this.background = stage.background;
+		this.lineIndex = 0;
+		
+	}
+	advance() {
+		this.lineIndex++;
+	}
+	isOver() {
+		return this.lineIndex >= this.lines.length;
+	}
+	getClosedCaptions() {
+		return this.lines[this.lineIndex].text;
+	}
+	getAudioPath() {
+		return "src/voice/"+settings.lang+"/"+this.lines[this.lineIndex].name+".mp3";
+	}
 }
 
+class CutsceneLine {
+	constructor(name) {
+		this.name = name;
+		this.text = lg(name);
+	}
+	canAdvance() {
+		return true;
+	}
+}
