@@ -9,8 +9,8 @@ class Jukebox {
 			youtube : {x:30, y:30, width:30, height:30},
 			soundcloud : {x:60, y:30, width:30, height:30},
 		});
-		this.returnButton = new TextButton("BACK", ()=>this.returnToMain(), SIZE-10, SIZE-10, 1, 1);
-		this.pauseButton = new PauseButton(SIZE-40, 10, 30, 30, this.sprites);
+		this.returnButton = new TextButton(lg("jukebox-back"), ()=>this.returnToMain(), SIZE-10, SIZE-10, 1, 1);
+		this.pauseButton = new PauseMusicButton(SIZE-40, 10, 30, 30, this.sprites);
 		this.pageLeftButton = new Button(5, 5, 30, 30, "<", ()=>this.pageLeft(-1));
 		this.pageRightButton = new Button(SIZE/2-35, 5, 30, 30, ">", ()=>this.pageRight(1));
 		this.currentPage = 0;
@@ -97,13 +97,13 @@ class Jukebox {
 	}
 }
 
-class PauseButton extends Button {
+class PauseMusicButton extends Button {
 	constructor(x, y, width, height, sprites) {
 		super(x, y, width, height, "P", ()=>{
 			if(music.paused)
-				music.play()
+				music.play();
 			else
-				music.pause()
+				music.pause();
 		});
 		this.sprites = sprites;
 	}

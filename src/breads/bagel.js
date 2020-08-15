@@ -45,7 +45,8 @@ class Bagel extends BreadBase {
 		}
 	}
 	hasFallen() {
-		return ((this.cx >= SIZE+this.oradius+this.radius) || (this.cx <= -this.oradius-this.radius));
+		//return ((this.cx >= SIZE+this.oradius+this.radius) || (this.cx <= -this.oradius-this.radius));
+		return ((this.cdx >= 0 && this.x >= SIZE+this.radius) || (this.cdx <= 0 && this.x <= -this.radius));
 	}
 }
 Bagel.prototype.collides = genCollidesCircle(0);

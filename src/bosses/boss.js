@@ -66,10 +66,11 @@ Boss.prototype.lDesc = "bossbattle-desc";
 Boss.prototype.diffMult = 1;
 
 class Benchmark {
-	constructor(portion, func) {
+	constructor(portion, func, marker) {
 		this.portion = portion;
 		this.x = (SIZE-BAR_MARGINS*2)*portion + BAR_MARGINS;
 		this.func = func;
+		this.marker = marker;
 	}
 	activate(user) {
 		this.func.call(user);

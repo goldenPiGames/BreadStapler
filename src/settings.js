@@ -1,41 +1,49 @@
 const OPTIONS_LIST = [
 	{
-		name : "lang",
-		title : "Language",
+		id : "lang",
+		lTitle : "settings-lang",
 		type : "choices",
 		//default : "en",
 		default : (navigator.userLanguage || navigator.language || "en-US").substr(0, 2),
-		choices : [
-			{name : "en", title : "English"},
-			{name : "es", title : "Español"},
-		]
+		choices : LANGUAGES.map(l => {return {id:l, lTitle:"lang-name"}}),
 	},
 	{
-		name : "music",
-		title : "Music",
+		id : "music",
+		lTitle : "settings-music",
 		type : "portion",
 		default : 8/10,
 		steps : 10,
 		func : "setMusicVolume",
 	},
 	{
-		name : "sfx",
-		title : "SFX",
+		id : "sfx",
+		lTitle : "settings-sfx",
 		type : "portion",
 		default : 8/10,
 		steps : 10,
-		func : "setSFXVolume",
+		func : p=>setSFXVolume(p),
 	},
 	{
-		name : "stay",
-		title : "Stay",
+		id : "stretch",
+		lTitle : "settings-stretch",
+		type : "choices",
+		default : "max2",
+		choices : [
+			{id : "always", lTitle : "settings-stretch-always"},
+			{id : "max2", lTitle : "settings-stretch-max2"},
+		],
+		func : ()=>fitCanvas(),
+	},
+	{
+		id : "stay",
+		lTitle : "settings-stay",
 		type : "portion",
 		default : 1/2,
 		steps : 10,
 	},
 	{
-		name : "hudalpha",
-		title : "HUD",
+		id : "hudalpha",
+		lTitle : "settings-hudalpha",
 		type : "portion",
 		default : .7,
 		steps : 10,
@@ -47,8 +55,8 @@ var settings;
 function loadSettings() {
 	settings = JSON.parse(localStorage.getItem("settings")) || {};
 	OPTIONS_LIST.forEach(function(oj) {
-		if (settings[oj.name] == undefined) {
-			settings[oj.name] = oj.default;
+		if (settings[oj.id] == undefined) {
+			settings[oj.id] = oj.default;
 		}
 	});
 }

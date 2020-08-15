@@ -66,7 +66,7 @@ DelayIntroStage.prototype.introducing = {
 	lDesc : "delay-desc",
 }
 DelayIntroStage.prototype.delay = 15;
-DelayIntroStage.prototype.maxPushDelay = 55;
+DelayIntroStage.prototype.maxPushDelay = 50;
 DelayIntroStage.prototype.maxBreadAtOnce = 2;
 
 class HardtackIntroStage extends AllBreadStage {
@@ -118,26 +118,57 @@ WaterTimedStage.prototype.baseTimeLimit = 30*60;
 WaterTimedStage.prototype.maxPushDelay = 40;
 WaterTimedStage.prototype.maxBreadAtOnce = 5;
 
-class BagelIntroStage extends TimedScoreStage {
+class BagelIntroStage extends AllBreadStage {
 	constructor(diffMult = 1) {
 		super(diffMult);
 		trees = [
 			new Oak(),
 		];
-		this.breadPopper = new WeightPopper(1.5,
-			//new WeightPopperTicket(SubRoll, 1),
-			new WeightPopperTicket(Bagel, 1),
-			);
+		this.breadQueue = shuffle([
+			new Bagel(),
+			new Bagel(),
+			new Bagel(),
+			new Bagel(),
+			new Bagel(),
+			new Bagel(),
+			new Bagel(),
+			new Bagel(),
+			new Bagel(),
+			new Bagel(),
+		]);
 		this.background = new BGUnderwater();
 	}
 }
 BagelIntroStage.prototype.lName = "stage-bagelintro";
 BagelIntroStage.prototype.introducing = Bagel;
 BagelIntroStage.prototype.delay = 15;
-BagelIntroStage.prototype.baseScoreGoal = 2000;
-BagelIntroStage.prototype.baseTimeLimit = 30*60;
-BagelIntroStage.prototype.maxPushDelay = 80;
-BagelIntroStage.prototype.maxBreadAtOnce = 13;
+BagelIntroStage.prototype.maxPushDelay = 90;
+BagelIntroStage.prototype.maxBreadAtOnce = 4;
+
+class MoreDelayStage extends TimedScoreStage {
+	constructor(diffMult = 1) {
+		super(diffMult);
+		trees = [
+			new Oak(),
+		];
+		this.breadPopper = new WeightPopper(1.5,
+			new WeightPopperTicket(SubRoll, 3),
+			new WeightPopperTicket(Hardtack, 1),
+			new WeightPopperTicket(Bagel, 1),
+			);
+		this.background = new BGUnderwater();
+	}
+}
+MoreDelayStage.prototype.lName = "stage-moredelay";
+MoreDelayStage.prototype.introducing = {
+	lName : "stage-moredelay-intro",
+	lDesc : "stage-moredelay-desc",
+}
+MoreDelayStage.prototype.delay = 30;
+MoreDelayStage.prototype.baseScoreGoal = 2000;
+MoreDelayStage.prototype.baseTimeLimit = 35*60;
+MoreDelayStage.prototype.maxPushDelay = 60;
+MoreDelayStage.prototype.maxBreadAtOnce = 13;
 
 class WaterBossStage extends BossBattleStage {
 	constructor(diffMult = 1) {
@@ -161,7 +192,6 @@ WaterBossStage.prototype.delayDuringPressure = 60;
 WaterBossStage.prototype.delayAfterPressure = 30;
 WaterBossStage.prototype.maxPushDelay = 90;
 
-
 class WaterEndScene extends Scene {
 	constructor(stage) {
 		super(stage);
@@ -182,4 +212,4 @@ WaterEndScene.prototype.draw = function() {
 	this.treant.draw();
 }
 
-WorldWater.prototype.stageCons = [SubIntroStage, DelayIntroStage, HardtackIntroStage, WaterTimedStage, BagelIntroStage, WaterBossStage];
+WorldWater.prototype.stageCons = [SubIntroStage, DelayIntroStage, HardtackIntroStage, WaterTimedStage, BagelIntroStage, MoreDelayStage, WaterBossStage];

@@ -2,25 +2,23 @@ var diffAdjCurrent;
 var diffAdjAll;
 
 function loseStage() {
-	stageLostScreen.begin();
+	diffAdjCurrent += 5;
+	diffAdjAll += 1;
+	runnee = new StageLostScreen();
 }
-
-var stageLostScreen = {
-	retryButton : new Button(SIZE/4, SIZE*2/3, SIZE/2, TEXT_HEIGHT+6, lg("lostscreen-retry"), function(){startStage(stageIndex)}),
-	mainMenuButton : new Button(SIZE/4, SIZE*2/3 + TEXT_HEIGHT*3/2, SIZE/2, TEXT_HEIGHT+6, lg("lostscreen-quit"), function(){worldSelect.begin();}),
-	begin : function() {
-		diffAdjCurrent += 5;
-		diffAdjAll += 1;
+class StageLostScreen {
+	constructor() {
+		this.retryButton = new Button(SIZE/4, SIZE*2/3, SIZE/2, TEXT_HEIGHT+6, lg("lostscreen-retry"), ()=>startStage(stageIndex));
+		this.mainMenuButton = new Button(SIZE/4, SIZE*2/3 + TEXT_HEIGHT*3/2, SIZE/2, TEXT_HEIGHT+6, lg("lostscreen-quit"), ()=>runnee = new WorldSelect());
 		if (stage.haltMusicOnLoss) {
 			stopMusic();
 			playSFX("haltlose");
 		}
-		runnee = this;
-	},
-	update : function() {
+	}
+	update() {
 		
-	},
-	draw : function() {
+	}
+	draw() {
 		drawText(lg("lostscreen-head"), SIZE/2, SIZE/4, 1/2);
 		drawText(lg("lostscreen-adjust"), SIZE/2, SIZE/2-TEXT_HEIGHT, 1/2);
 		drawText(lg("lostscreen-this"), SIZE/2, SIZE/2, 1); drawText("-"+diffAdjCurrent+"%", SIZE/2, SIZE/2, 0);
@@ -28,11 +26,11 @@ var stageLostScreen = {
 		this.stageTotal = 0;
 		this.retryButton.draw();
 		this.mainMenuButton.draw();
-	},
-	click : function(x, y) {
+	}
+	click(x, y) {
 		this.retryButton.checkClick(x, y);
 		this.mainMenuButton.checkClick(x, y);
-	},
+	}
 }
 
 /*var gameOverScreen = {

@@ -3,10 +3,9 @@ WORLDS.forEach((oj, dex) => {
 	oj.cons.prototype.data = oj;
 });
 
-var stageIntroScreen = {
-	continueButton : new Button(SIZE/3, SIZE - 50, SIZE/3, TEXT_HEIGHT+6, "BEGIN", startStageForReal),
-	begin : function() {
-		runnee = this;
+class StageIntroScreen {
+	constructor() {
+		this.continueButton = new Button(SIZE/3, SIZE - 50, SIZE/3, TEXT_HEIGHT+6, lg("stageintro-begin"), startStageForReal);
 		this.buttons = [
 			this.continueButton,
 		];
@@ -24,11 +23,11 @@ var stageIntroScreen = {
 				playMusic(stage.music);
 			}
 		}
-	},
-	update : function() {
+	}
+	update() {
 		
-	},
-	draw : function() {
+	}
+	draw() {
 		if (this.duction.draw)
 			this.duction.draw();
 		ctx.globalAlpha = 1;
@@ -39,10 +38,10 @@ var stageIntroScreen = {
 		this.buttons.forEach(oj=>oj.draw());
 		if (stage.delay)
 			drawText("DELAY:"+stage.delay, 0, SIZE-TEXT_HEIGHT, 0);
-	},
-	click : function(x, y) {
+	}
+	click(x, y) {
 		this.buttons.forEach(oj=>oj.checkClick(x, y));
-	},
+	}
 }
 
 function startStageForReal() {

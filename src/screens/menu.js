@@ -9,8 +9,8 @@ class MainMenu {
 			new Button(SIZE/4, SIZE/2, SIZE/2, TEXT_HEIGHT+6, lg("mainmenu-play"), ()=>WORLDS[0].hiscore ? runnee = new WorldSelect() : startWorld(0)),
 			new Button(SIZE/4, SIZE/2+TEXT_HEIGHT*3/2, SIZE/2, TEXT_HEIGHT+6, lg("mainmenu-instructions"), function(){instructionsScreen.begin()}),
 			new Button(SIZE/4, SIZE/2+TEXT_HEIGHT*6/2, SIZE/2, TEXT_HEIGHT+6, lg("mainmenu-jukebox"), ()=>runnee=new Jukebox()),
-			new Button(SIZE/4, SIZE/2+TEXT_HEIGHT*9/2, SIZE/2, TEXT_HEIGHT+6, lg("mainmenu-settings"), function(){settingsScreen.begin()}),
-			new Button(SIZE/4, SIZE/2+TEXT_HEIGHT*12/2, SIZE/2, TEXT_HEIGHT+6, lg("mainmenu-credits"), function(){creditsScreen.begin()}),
+			new Button(SIZE/4, SIZE/2+TEXT_HEIGHT*9/2, SIZE/2, TEXT_HEIGHT+6, lg("mainmenu-settings"), ()=>runnee=new SettingsScreen()),
+			new Button(SIZE/4, SIZE/2+TEXT_HEIGHT*12/2, SIZE/2, TEXT_HEIGHT+6, lg("mainmenu-credits"), ()=>runnee=new CreditsScreen()),
 		];
 	}
 	update() {
