@@ -1,11 +1,12 @@
 class Button {
-	constructor(x, y, width, height, text, action = doNothing) {
+	constructor(x, y, width, height, text, action) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
 		this.text = text;
-		this.action = action;
+		if (action)
+			this.action = action;
 	}
 	draw() {
 		ctx.fillStyle = "#eeeeee";
@@ -22,6 +23,9 @@ class Button {
 		//console.log("clicked");
 		playSFX("staple");
 		this.action();
+	}
+	action() {
+		
 	}
 }
 
@@ -40,5 +44,11 @@ class IconButton extends Button {
 	}
 	draw() {
 		drawSprite(this.image, this.x+this.width/2, this.y+this.height/2, .5, .5);
+	}
+}
+
+class IconLinkButton extends IconButton {
+	constructor(image, url, x, y, xoff=0, yoff=0) {
+		super(image, ()=>window.open(url), x, y, xoff, yoff);
 	}
 }

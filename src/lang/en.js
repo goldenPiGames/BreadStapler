@@ -122,6 +122,7 @@ LANG.en = {
 	"credits-me2" : "Concept, Story, etc.",
 	"credits-bstttitle" : "Inspiration",
 	"credits-music" : "Music",
+	"credits-lang" : "Languages",
 	
 	"settings-lang" : "Lang",
 	"settings-music" : "music",

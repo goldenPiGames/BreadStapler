@@ -24,11 +24,6 @@ class WaterTreant extends Treant {
 		this.updateDOT();
 		this.leftEye.update();
 		this.rightEye.update();
-		/*this.fruitDelay -= 2 + PRound(3*(1-this.getHPPortion()));
-		if (this.fruitDelay <= 0) {
-			this.spawnFruit();
-			this.fruitDelay += this.fruitDelayMax;
-		}*/
 	}
 	respondFall(slice) {
 		
@@ -140,7 +135,7 @@ class WaterTreant extends Treant {
 	}
 	startPressure() {
 		this.updateEx = this.updatePressure;
-		this.dotDelayMax = 2;
+		this.dotDelayMax = this.dotDelayMaxPressure;
 		this.storedBreadPopper = stage.breadPopper;
 		stage.breadPopper = new WeightPopper(1,
 			new WeightPopperTicket(SubRoll, 1)
@@ -160,7 +155,7 @@ class WaterTreant extends Treant {
 	stopPressure() {
 		this.returnNeutral();
 		this.currentBenchmark = null;
-		this.dotDelayMax = 4;
+		this.dotDelayMax = this.dotDelayMaxAfterPressure;
 		stage.delay = stage.delayAfterPressure;
 		stage.breadPopper = this.storedBreadPopper;
 	}
@@ -196,6 +191,8 @@ WaterTreant.prototype.width = 120;
 
 WaterTreant.prototype.dotDelay = 1;
 WaterTreant.prototype.dotDelayMax = 6;
+WaterTreant.prototype.dotDelayMaxPressure = 2;
+WaterTreant.prototype.dotDelayMaxAfterPressure = 4;
 WaterTreant.prototype.fuseBase = 450;
 
 //------------------------------------------------------------------ Hand
@@ -224,7 +221,6 @@ class WaterTreantHand extends Boss {
 		return true;
 	}
 	draw() {
-		//this.drawHPBar();
 		ctx.globalAlpha = 1;
 		drawSprite(this.sprites.palm, this.x, this.y, 1/2, 1/2);
 		this.digits.forEach(oj=>oj.draw());

@@ -1,3 +1,7 @@
+const MY_DISCORD = "https://discord.gg/ErnbtbJ";
+const MY_PATREON = "https://www.patreon.com/goldenPiGames";
+const MY_NEWGROUNDS = "https://goldenpigames.newgrounds.com/";
+
 const CREDITS_SPEED = 5;
 
 class CreditsScreen {
@@ -24,6 +28,10 @@ class CreditsScreen {
 				this.list.push(new CreditsLine(oj, 1));
 			});
 		}
+		this.list.push(new CreditsLine(), new CreditsLine(lg("credits-lang"), 1/2));
+		LANGUAGES.forEach(l => {
+			this.list.push(new CreditsLine(LANG[l]["lang-name"], 0), ...LANG[l]["lang-credits"].map(c=>new CreditsLine(c, 1)));
+		});
 	}
 	begin() {
 		runnee = this;

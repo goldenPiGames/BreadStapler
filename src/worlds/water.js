@@ -191,6 +191,7 @@ WaterBossStage.prototype.delay = 15;
 WaterBossStage.prototype.delayDuringPressure = 60;
 WaterBossStage.prototype.delayAfterPressure = 30;
 WaterBossStage.prototype.maxPushDelay = 90;
+WaterBossStage.prototype.pointHealMult = 1/3;
 
 class WaterEndScene extends Scene {
 	constructor(stage) {

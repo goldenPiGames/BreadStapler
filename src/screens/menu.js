@@ -4,6 +4,11 @@ function toMainMenu() {
 
 class MainMenu {
 	constructor() {
+		this.sprites = makeSprites("src/miscsprites/mainlinks.png", {
+			discord : {x:0, y:0, width:30, height:30},
+			newgrounds : {x:30, y:0, width:30, height:30},
+			patreon : {x:60, y:0, width:30, height:30},
+		});
 		loadHiscores();
 		this.buttons = [
 			new Button(SIZE/4, SIZE/2, SIZE/2, TEXT_HEIGHT+6, lg("mainmenu-play"), ()=>WORLDS[0].hiscore ? runnee = new WorldSelect() : startWorld(0)),
@@ -11,6 +16,9 @@ class MainMenu {
 			new Button(SIZE/4, SIZE/2+TEXT_HEIGHT*6/2, SIZE/2, TEXT_HEIGHT+6, lg("mainmenu-jukebox"), ()=>runnee=new Jukebox()),
 			new Button(SIZE/4, SIZE/2+TEXT_HEIGHT*9/2, SIZE/2, TEXT_HEIGHT+6, lg("mainmenu-settings"), ()=>runnee=new SettingsScreen()),
 			new Button(SIZE/4, SIZE/2+TEXT_HEIGHT*12/2, SIZE/2, TEXT_HEIGHT+6, lg("mainmenu-credits"), ()=>runnee=new CreditsScreen()),
+			new IconLinkButton(this.sprites.newgrounds, MY_NEWGROUNDS, 0, SIZE-64, 0, 1),
+			new IconLinkButton(this.sprites.discord, MY_DISCORD, 0, SIZE-32, 0, 1),
+			new IconLinkButton(this.sprites.patreon, MY_PATREON, 0, SIZE-0, 0, 1),
 		];
 	}
 	update() {

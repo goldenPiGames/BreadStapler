@@ -13,7 +13,7 @@ const OPTIONS_LIST = [
 		type : "portion",
 		default : 8/10,
 		steps : 10,
-		func : "setMusicVolume",
+		func : p=>setMusicVolume(p),
 	},
 	{
 		id : "sfx",

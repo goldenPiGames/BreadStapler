@@ -71,7 +71,7 @@ class OptionItemPortion extends OptionItem {
 
 class OptionItemPortionBox extends Button {
 	constructor(portion, parent, x, y, width, height) {
-		super();
+		super(x, y, width, height, "|", undefined);
 		this.portion = portion;
 		this.parent = parent;
 		this.x = x;
@@ -98,6 +98,7 @@ class OptionItemChoices extends OptionItem {
 		super();
 		this.option = op;
 		this.y = y;
+		this.choiceIndex = 0;
 		for (var i = 0; i < this.option.choices.length; i++) {
 			if (this.option.choices[i].id == settings[this.option.id])
 				this.choiceIndex = i;
@@ -106,7 +107,6 @@ class OptionItemChoices extends OptionItem {
 		}
 		this.leftButton = new TextButton("<", ()=>this.handleLeft(), SIZE/2-40, this.y, 0);
 		this.rightButton = new TextButton(">", ()=>this.handleRight(), SIZE-4, this.y, 1);
-		this.choiceIndex = 0;
 		this.textX = (this.leftButton.x + this.leftButton.width + this.rightButton.x) / 2
 	}
 	draw(oj) {
