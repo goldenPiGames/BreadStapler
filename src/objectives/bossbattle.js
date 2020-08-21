@@ -28,7 +28,7 @@ class BossBattleStage extends Stage {
 		this.boss.respondFall(slice);
 	}
 	pointsBonus(points) {
-		this.playerHP += points;
+		this.playerHP += points * this.pointHealMult;
 	}
 	hurtCurse(points) {
 		this.playerHP -= points;
@@ -77,6 +77,7 @@ BossBattleStage.prototype.haltMusicBefore = true;
 BossBattleStage.prototype.haltMusicOnLoss = true;
 BossBattleStage.prototype.pushDelay = 0;
 BossBattleStage.prototype.accFallen = 0;
+BossBattleStage.prototype.pointHealMult = 1;
 BossBattleStage.prototype.maxBreadAtOnce = Infinity;
 
 var bossFinishing = {

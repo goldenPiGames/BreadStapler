@@ -41,8 +41,11 @@ const gameEngine = {
 		staples.forEach(oj => oj.draw());
 		faders = faders.filter(oj=>oj.drawAfter());
 		stage.drawHUD();
+		this.pauseButton.draw();
 	},
 	click : function(ix, iy) {
-		staples.push(new Staple(ix, iy, stage.delay || 0));
+		if (!this.pauseButton.checkClick(ix, iy));
+			staples.push(new Staple(ix, iy, stage.delay || 0));
 	},
+	pauseButton : new PauseButton(1, 1),
 }

@@ -1,11 +1,9 @@
 class AllBreadStage extends Stage {
 	update() {
-		if (breads.length < this.maxBreadAtOnce && this.breadQueue.length > 0) {
-			this.pushDelay--;
-			if (this.pushDelay <= 0) {
-				breads.push(this.breadQueue.shift().reset());
-				this.pushDelay = this.maxPushDelay * (.8+.4*Math.random());
-			}
+		this.pushDelay--;
+		if (this.pushDelay <= 0 && breads.length < this.maxBreadAtOnce && this.breadQueue.length > 0) {
+			breads.push(this.breadQueue.shift().reset());
+			this.pushDelay = this.maxPushDelay * (.8+.4*Math.random());
 		}
 	}
 	breadFell(slice) {

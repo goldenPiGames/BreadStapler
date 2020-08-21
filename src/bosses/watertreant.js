@@ -4,7 +4,7 @@ class WaterTreant extends Treant {
 		this.x = SIZE/2;
 		this.benchmarks = [
 			//new Benchmark(1.0, ()=>this.startOrbitars(7)),
-			new Benchmark(.8, ()=>this.startFist(false)),
+			new Benchmark(.8, ()=>this.startFist(false), "leftfist"),
 			new Benchmark(.6, ()=>this.startOrbitars(5)),
 			new Benchmark(.6, ()=>this.startPressure(true)),
 			new Benchmark(.4, ()=>this.stopPressure(true)),
@@ -24,40 +24,36 @@ class WaterTreant extends Treant {
 		this.updateDOT();
 		this.leftEye.update();
 		this.rightEye.update();
-		/*this.fruitDelay -= 2 + PRound(3*(1-this.getHPPortion()));
-		if (this.fruitDelay <= 0) {
-			this.spawnFruit();
-			this.fruitDelay += this.fruitDelayMax;
-		}*/
 	}
 	respondFall(slice) {
 		
 	}
 	draw() {
-		//if (!this.shieldActive) {
-			ctx.globalAlpha = 1;
-			drawSprite(this.sprites.trunk, this.x, 0, 1/2, 0);
-			this.leftEye.draw(!this.shieldActive);
-			this.rightEye.draw(!this.shieldActive);
-			if (settings.stay && !this.shieldActive) {
-				ctx.globalAlpha = settings.stay/2;
-				this.affixed.forEach(oj => oj.draw());
-			}
-			ctx.globalAlpha = 1;
-			if (this.shieldActive) {
-				drawSprite(this.sprites.shield, this.x, 0, 1/2, 0);
-			}
-			if (this.fuse) {
-				ctx.lineWidth = 6;
-				ctx.strokeStyle = 0;
-				ctx.beginPath();
-				ctx.arc(SIZE/2, SIZE/2, 25, 0, 2 * Math.PI);
-				var handtheta = Math.PI * (-.5 - 2 * (this.fuseMax ? this.fuse/this.fuseMax : 0));
-				ctx.moveTo(SIZE/2, SIZE/2);
-				ctx.lineTo(SIZE/2 + 20*Math.cos(handtheta), SIZE/2 + 20*Math.sin(handtheta));
-				ctx.stroke();
-			}
-		//}
+		ctx.globalAlpha = 1;
+		drawSprite(this.sprites.trunk, this.x, 0, 1/2, 0);
+		this.leftEye.draw(!this.shieldActive);
+		this.rightEye.draw(!this.shieldActive);
+		if (settings.stay && !this.shieldActive) {
+			ctx.globalAlpha = settings.stay/2;
+			this.affixed.forEach(oj => oj.draw());
+		}
+		ctx.globalAlpha = 1;
+		if (this.shieldActive) {
+			drawSprite(this.sprites.shield, this.x, 0, 1/2, 0);
+		}
+		if (this.fuse) {
+			ctx.lineWidth = 6;
+			ctx.strokeStyle = 0;
+			ctx.beginPath();
+			ctx.arc(SIZE/2, SIZE/2, 25, 0, 2 * Math.PI);
+			var handtheta = Math.PI * (-.5 - 2 * (this.fuseMax ? this.fuse/this.fuseMax : 0));
+			ctx.moveTo(SIZE/2, SIZE/2);
+			ctx.lineTo(SIZE/2 + 20*Math.cos(handtheta), SIZE/2 + 20*Math.sin(handtheta));
+			ctx.stroke();
+		} else if (this.fistAdvice) {
+			this.fistAdvice--;
+			drawParagraph(lg("watertreant-centerfist-info"), 0, SIZE/2 + WaterTreantHand.prototype.height/2 + 5, SIZE, 1/2, 0);
+		}
 	}
 	collides(x, y) {
 		var bass = this.collidesBase(x, y)
@@ -85,8 +81,11 @@ class WaterTreant extends Treant {
 		this.storedBreads = breads;
 		breads = [this.hand];
 		this.ringDelay = 180;
-		this.ringDelayMax = 120 / this.diffMult;
-		this.ringsLeft = /*isRight ? 7 :*/ 5;
+		this.ringDelayMax = 120 * (2 - this.diffMult);
+		this.ringsLeft = 5;
+		if (!isRight) {
+			this.fistAdvice = 180 + this.ringDelayMax;
+		}
 		faders.push(new ScreenFlash("#000069", 30));
 	}
 	updateFist(isRight) {
@@ -136,11 +135,12 @@ class WaterTreant extends Treant {
 	}
 	startPressure() {
 		this.updateEx = this.updatePressure;
-		this.dotDelayMax = 2;
+		this.dotDelayMax = this.dotDelayMaxPressure;
 		this.storedBreadPopper = stage.breadPopper;
 		stage.breadPopper = new WeightPopper(1,
 			new WeightPopperTicket(SubRoll, 1)
 		);
+		breads = breads.filter(b => !(b instanceof Hardtack || b instanceof Bagel));
 		stage.delay = stage.delayDuringPressure;
 	}
 	switchToHardtack() {
@@ -155,7 +155,7 @@ class WaterTreant extends Treant {
 	stopPressure() {
 		this.returnNeutral();
 		this.currentBenchmark = null;
-		this.dotDelayMax = 4;
+		this.dotDelayMax = this.dotDelayMaxAfterPressure;
 		stage.delay = stage.delayAfterPressure;
 		stage.breadPopper = this.storedBreadPopper;
 	}
@@ -191,6 +191,8 @@ WaterTreant.prototype.width = 120;
 
 WaterTreant.prototype.dotDelay = 1;
 WaterTreant.prototype.dotDelayMax = 6;
+WaterTreant.prototype.dotDelayMaxPressure = 2;
+WaterTreant.prototype.dotDelayMaxAfterPressure = 4;
 WaterTreant.prototype.fuseBase = 450;
 
 //------------------------------------------------------------------ Hand
@@ -219,7 +221,6 @@ class WaterTreantHand extends Boss {
 		return true;
 	}
 	draw() {
-		//this.drawHPBar();
 		ctx.globalAlpha = 1;
 		drawSprite(this.sprites.palm, this.x, this.y, 1/2, 1/2);
 		this.digits.forEach(oj=>oj.draw());
@@ -230,7 +231,6 @@ class WaterTreantHand extends Boss {
 		var chargeAmount = PRound(portion * this.maxDamagePerRing);
 		this.punchDamage += chargeAmount;
 		faders.push(new TextFader(countdown, this.x, this.y));
-		//console.log(new TextFader(countdown, this.x, this.y))
 		playSFX("charge");
 	}
 	unleashPunch() {

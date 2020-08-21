@@ -44,7 +44,7 @@ var sceneScreen = {
 		if (this.scene.isOver()) {
 			this.end();
 		} else {
-			this.playVoice();
+			//this.playVoice();
 		}
 	},
 	playVoice : function() {

@@ -47,7 +47,7 @@ function startStage(index) {
 		worldFinishedScreen.begin();
 	} else {
 		stage = world.getStage(index, diffMult);
-		stageIntroScreen.begin();
+		runnee = new StageIntroScreen();
 	}
 }
 

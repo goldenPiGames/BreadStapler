@@ -34,36 +34,22 @@ function launchGame() {*/
 	coreEngine.start();
 }
 
-function setBackgroundWidth() {
-	var size = Math.min(window.innerWidth, window.innerHeight, SIZE*2);
-	backDiv.style.width = size+"px";
-	backDiv.style.height = size+"px";
-	if (size == SIZE*2)
-		backDiv.classList.add("pixellated");
-	else
-		backDiv.classList.remove("pixellated");
-}
 function fitCanvas(e) {
 	var rekt = backDiv.getBoundingClientRect();
-	//console.log(rekt);
-	if (!document.fullscreen && !ALWAYS_RESIZE && !settings.alwaysStretch && rekt.width > SIZE*2 && rekt.height > SIZE*2) {
-		//console.log("part");
+	if (!document.fullscreen && settings.stretch != "always" && rekt.width > SIZE*2 && rekt.height > SIZE*2) {
 		canvas.classList.remove("fullscreenWider");
 		canvas.classList.remove("fullscreenTaller");
 		canvas.classList.add("partscreen");
 	} else if (rekt.width/rekt.height >= 1) {
-		//console.log("wider");
 		canvas.classList.remove("partscreen");
 		canvas.classList.remove("fullscreenTaller");
 		canvas.classList.add("fullscreenWider");
 	} else {
-		//console.log("taller");
 		canvas.classList.remove("partscreen");
 		canvas.classList.remove("fullscreenWider");
 		canvas.classList.add("fullscreenTaller");
 	}
 	var size = canvas.getBoundingClientRect().width;
-	//console.log(size);
 	if (size == SIZE*2)
 		backDiv.classList.add("pixellated");
 	else

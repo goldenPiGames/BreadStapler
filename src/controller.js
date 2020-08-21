@@ -22,6 +22,5 @@ function makeClick(clientX, clientY) {
 	var rect = canvas.getBoundingClientRect();
 	var adjX = (clientX-rect.left)*canvas.width/rect.width;
 	var adjY = (clientY-rect.top)*canvas.height/rect.height;
-	//console.log("x: " + adjX + ", y: " + adjY);
 	runnee.click(adjX, adjY);
 }
