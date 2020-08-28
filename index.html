@@ -9,14 +9,15 @@
 		<style>
 			body {
 				background-color: #202020;
-				width : 100%;
+				width: 100%;
 				margin: 0;
-				padding : 0;
+				padding: 0;
 			}
 			#BackgroundBox {
-				margin: auto;
 				overflow: hidden;
 				position: absolute;
+				left: 0px;
+				top: 0px;
 				width: 100%;
 				height: 100%;
 				border-color: #BBBBBB;
@@ -25,9 +26,6 @@
 			}
 			#GraphicsBox {
 				overflow: hidden;
-				position: absolute;
-				left: 0px;
-				top: 0px;
 			}
 			.partscreen {
 				position: absolute;
@@ -126,7 +124,7 @@
 	</head>
 	<body id="Body">
 		<div id="BackgroundBox">
-			<canvas id="GraphicsBox" width="360px" height="360px">Your browser requires Canvas support to play this game.</canvas>
+			<canvas id="GraphicsBox" class="partscreen" width="360px" height="360px">Your browser requires Canvas support to play this game.</canvas>
 		</div>
 		<audio id="music" src="" hidden>music</audio>
 		
