@@ -16,9 +16,9 @@ class CreditsScreen {
 			new CreditsLine(lg("credits-bstttitle"), 1/2),
 			new CreditsLine("r/BreadStapledToTrees", 0),
 			new CreditsLine(),
-			//new CreditsLine("Trailer", 1/2),
-			//new CreditsLine("OwlTowel", 0),
-			//new CreditsLine("(u/Owl_Towels)", 1/8),
+			/*new CreditsLine("Trailer", 1/2),
+			new CreditsLine("OwlTowel", 0),
+			new CreditsLine("(u/Owl_Towels)", 1/8),*/
 			new CreditsLine(),
 			new CreditsLine(lg("credits-music"), 1/2),
 		]
@@ -32,6 +32,7 @@ class CreditsScreen {
 		LANGUAGES.forEach(l => {
 			this.list.push(new CreditsLine(LANG[l]["lang-name"], 0), ...LANG[l]["lang-credits"].map(c=>new CreditsLine(c, 1)));
 		});
+		this.list.push(new CreditsLine("You could be here", 1/2), new CreditsLine("Volunteers welcome", 1/2), new CreditsLine("on my discord", 1/2));
 	}
 	begin() {
 		runnee = this;
